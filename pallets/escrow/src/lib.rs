@@ -17,7 +17,11 @@ type AccountIdOf<T> = <T as frame_system::Config>::AccountId;
 type BalanceOf<T> = <<T as Config>::Currency as Currency<AccountIdOf<T>>>::Balance;
 
 #[cfg(test)]
+mod mock;
+
+#[cfg(test)]
 mod tests;
+
 
 #[frame_support::pallet]
 pub mod pallet {

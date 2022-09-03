@@ -270,6 +270,11 @@ impl pallet_template::Config for Runtime {
 	type Event = Event;
 }
 
+impl escrow::Config for Runtime {
+	type Event = Event;
+	type Currency = Balances;
+}
+
 // Create the runtime by composing the FRAME pallets that were previously configured.
 construct_runtime!(
 	pub struct Runtime
@@ -288,6 +293,7 @@ construct_runtime!(
 		Sudo: pallet_sudo,
 		// Include the custom logic from the pallet-template in the runtime.
 		TemplateModule: pallet_template,
+		Escrow: escrow,
 	}
 );
 

@@ -23,6 +23,9 @@ mod mock;
 mod tests;
 mod benchmarking;
 
+pub mod weights;
+
+pub use weights::*;
 
 #[frame_support::pallet]
 pub mod pallet {
@@ -37,7 +40,7 @@ pub mod pallet {
 	};
 	use frame_support::storage::child::get;
 	use frame_support::traits::{LockableCurrency, Time, WithdrawReasons};
-	use crate::{BalanceOf, EXAMPLE_ID};
+	use crate::{BalanceOf, EXAMPLE_ID, WeightInfo};
 
 	/// Configure the pallet by specifying the parameters and types on which it depends.
 	#[pallet::config]
@@ -47,6 +50,8 @@ pub mod pallet {
 
 		/// The lockable currency type
 		type Currency: LockableCurrency<Self::AccountId, Moment = Self::BlockNumber>;
+
+		type WeightInfo: WeightInfo;
 	}
 
 	#[pallet::pallet]
@@ -114,7 +119,7 @@ pub mod pallet {
 	impl<T: Config> Pallet<T> {
 
 		/// Sign contract between two addresses
-		#[pallet::weight(10_000)]
+		#[pallet::weight(T::WeightInfo::sign_contract())]
 		pub fn sign_contract(
 			origin: OriginFor<T>,
 			to: T::AccountId,

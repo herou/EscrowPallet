@@ -10,15 +10,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0f94cc98-2443-42bd-b46d-4130d0942d61" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/pallets/escrow/src/weights.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cargo.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pallets/escrow/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/pallets/escrow/Cargo.toml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pallets/escrow/src/benchmarking.rs" beforeDir="false" afterPath="$PROJECT_DIR$/pallets/escrow/src/benchmarking.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pallets/escrow/src/lib.rs" beforeDir="false" afterPath="$PROJECT_DIR$/pallets/escrow/src/lib.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pallets/template/src/benchmarking.rs" beforeDir="false" afterPath="$PROJECT_DIR$/pallets/template/src/benchmarking.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/runtime/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/runtime/Cargo.toml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/runtime/src/lib.rs" beforeDir="false" afterPath="$PROJECT_DIR$/runtime/src/lib.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pallets/escrow/src/mock.rs" beforeDir="false" afterPath="$PROJECT_DIR$/pallets/escrow/src/mock.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pallets/escrow/src/tests.rs" beforeDir="false" afterPath="$PROJECT_DIR$/pallets/escrow/src/tests.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -72,6 +67,48 @@
       <recent name="$PROJECT_DIR$/pallets/escrow/src" />
     </key>
   </component>
+  <component name="RunManager" selected="Cargo.Test tests::sign_contract_test3">
+    <configuration name="Test tests::sign_contract_test2" type="CargoCommandRunConfiguration" factoryName="Cargo Command" temporary="true">
+      <option name="command" value="test --package escrow --lib tests::sign_contract_test2 -- --exact" />
+      <option name="workingDirectory" value="file://$PROJECT_DIR$" />
+      <option name="channel" value="DEFAULT" />
+      <option name="requiredFeatures" value="true" />
+      <option name="allFeatures" value="false" />
+      <option name="emulateTerminal" value="false" />
+      <option name="withSudo" value="false" />
+      <option name="buildTarget" value="REMOTE" />
+      <option name="backtrace" value="SHORT" />
+      <envs />
+      <option name="isRedirectInput" value="false" />
+      <option name="redirectInputPath" value="" />
+      <method v="2">
+        <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Test tests::sign_contract_test3" type="CargoCommandRunConfiguration" factoryName="Cargo Command" temporary="true">
+      <option name="command" value="test --package escrow --lib tests::sign_contract_test3 -- --exact" />
+      <option name="workingDirectory" value="file://$PROJECT_DIR$" />
+      <option name="channel" value="DEFAULT" />
+      <option name="requiredFeatures" value="true" />
+      <option name="allFeatures" value="false" />
+      <option name="emulateTerminal" value="false" />
+      <option name="withSudo" value="false" />
+      <option name="buildTarget" value="REMOTE" />
+      <option name="backtrace" value="SHORT" />
+      <envs />
+      <option name="isRedirectInput" value="false" />
+      <option name="redirectInputPath" value="" />
+      <method v="2">
+        <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Cargo.Test tests::sign_contract_test3" />
+        <item itemvalue="Cargo.Test tests::sign_contract_test2" />
+      </list>
+    </recent_temporary>
+  </component>
   <component name="RustProjectSettings">
     <option name="toolchainHomeDirectory" value="$PROJECT_DIR$/../.cargo/bin" />
     <option name="version" value="2" />
@@ -90,7 +127,8 @@
       <workItem from="1662132662304" duration="5485000" />
       <workItem from="1662145408602" duration="46000" />
       <workItem from="1662145478937" duration="45812000" />
-      <workItem from="1662331869467" duration="1798000" />
+      <workItem from="1662331869467" duration="15150000" />
+      <workItem from="1662418815646" duration="1949000" />
     </task>
     <servers />
   </component>
@@ -120,6 +158,16 @@
           <url>file://$PROJECT_DIR$/runtime/src/lib.rs</url>
           <line>24</line>
           <option name="timeStamp" value="2" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/pallets/escrow/src/lib.rs</url>
+          <line>153</line>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/pallets/escrow/src/lib.rs</url>
+          <line>151</line>
+          <option name="timeStamp" value="5" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

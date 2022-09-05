@@ -130,7 +130,7 @@ pub mod pallet {
 			let from = ensure_signed(origin)?;
 			ensure!(from != to, Error::<T>::SameAddressError);
 
-			let prod_block_per_sec = 30;
+			let prod_block_per_sec = 6;
 			let day_per_second = 86400;
 			let prod_block_per_day  = day_per_second/prod_block_per_sec;
 

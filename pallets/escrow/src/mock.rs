@@ -80,6 +80,7 @@ impl pallet_balances::Config for Test {
 impl Config for Test {
     type Event = Event;
     type Currency = Balances;
+    type WeightInfo = escrow::weights::SubstrateWeight<Test>;
 }
 
 pub fn new_test_ext() -> TestExternalities {

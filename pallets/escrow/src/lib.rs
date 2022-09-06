@@ -1,15 +1,8 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 #![allow(clippy::unused_unit)]
 
-//! Struct Storage
-//! This pallet demonstrates how to declare and store `strcuts` that contain types
-//! that come from the pallet's configuration trait.
-
-use frame_support::{Parameter, sp_runtime};
-use frame_support::traits::{Currency, LockIdentifier, Time};
-use sp_runtime::traits::*;
+use frame_support::traits::{Currency, LockIdentifier};
 pub use pallet::*;
-use codec::{Decode, Encode, FullCodec, MaxEncodedLen};
 
 const EXAMPLE_ID: LockIdentifier = *b"example ";
 
@@ -30,16 +23,13 @@ pub use weights::*;
 #[frame_support::pallet]
 pub mod pallet {
 	use frame_support::{dispatch::DispatchResultWithPostInfo, pallet_prelude::*};
-	use frame_system::Origin;
 	use frame_system::pallet_prelude::*;
 	use core::convert::TryInto;
 
 	use frame_support::{
-		pallet_prelude::*,
-		traits::{Currency, ExistenceRequirement::AllowDeath, ReservableCurrency},
+		traits::{Currency, ExistenceRequirement::AllowDeath},
 	};
-	use frame_support::storage::child::get;
-	use frame_support::traits::{LockableCurrency, Time, WithdrawReasons};
+	use frame_support::traits::{LockableCurrency, WithdrawReasons};
 	use crate::{BalanceOf, EXAMPLE_ID, WeightInfo};
 
 	/// Configure the pallet by specifying the parameters and types on which it depends.
@@ -132,7 +122,7 @@ pub mod pallet {
 
 			let prod_block_per_sec = 6;
 			let day_per_second = 86400;
-			let prod_block_per_day  = day_per_second/prod_block_per_sec;
+			let prod_block_per_day = day_per_second / prod_block_per_sec;
 
 			let current_block_number: u64 = frame_system::Pallet::<T>::block_number().try_into().unwrap_or(0);
 			let work_days_in_block_number = current_block_number + (work_days * prod_block_per_day);
@@ -142,13 +132,13 @@ pub mod pallet {
 				origin: from.clone(),
 				to: to.clone(),
 				amount: amount.clone(),
-				 current_block_number: current_block_number.clone(),
-				 work_days_in_block_number: work_days_in_block_number.clone(),
-				 take_action_days_in_block: take_action_days_in_block.clone(),
+				current_block_number: current_block_number.clone(),
+				work_days_in_block_number: work_days_in_block_number.clone(),
+				take_action_days_in_block: take_action_days_in_block.clone(),
 			};
 
-			 <ContractSender<T>>::insert(from.clone(), &contract);
-			 <ContractReceiver<T>>::insert(to.clone(), contract);
+			<ContractSender<T>>::insert(from.clone(), &contract);
+			<ContractReceiver<T>>::insert(to.clone(), contract);
 			Self::deposit_event(Event::ContractEvent(from.clone(), to, amount.clone(), current_block_number, work_days_in_block_number, take_action_days_in_block));
 
 			T::Currency::set_lock(EXAMPLE_ID, &from, amount.clone(), WithdrawReasons::all());
@@ -157,7 +147,7 @@ pub mod pallet {
 			Ok(().into())
 		}
 
-
+/*
 		/// Withdraw funds
 		#[pallet::weight(10_000)]
 		pub fn withdraw_funds(
@@ -203,8 +193,9 @@ pub mod pallet {
 			}
 
 			Ok(().into())
-		}
+		} */
 
+		/*
 		/// Send funds
 		#[pallet::weight(10_000)]
 		pub fn send_funds(
@@ -237,6 +228,6 @@ pub mod pallet {
                 }
 
 			Ok(().into())
-		}
+		} */
 	}
 }

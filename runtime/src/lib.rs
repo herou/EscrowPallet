@@ -43,11 +43,8 @@ use pallet_transaction_payment::CurrencyAdapter;
 pub use sp_runtime::BuildStorage;
 pub use sp_runtime::{Perbill, Permill};
 
-/// Import the template pallet.
-pub use pallet_template;
 
 pub use escrow;
-use escrow::WeightInfo;
 
 /// An index to a block.
 pub type BlockNumber = u32;
@@ -268,11 +265,6 @@ impl pallet_sudo::Config for Runtime {
 	type Call = Call;
 }
 
-/// Configure the pallet-template in pallets/template.
-impl pallet_template::Config for Runtime {
-	type Event = Event;
-}
-
 impl escrow::Config for Runtime {
 	type Event = Event;
 	type Currency = Balances;
@@ -296,7 +288,6 @@ construct_runtime!(
 		TransactionPayment: pallet_transaction_payment,
 		Sudo: pallet_sudo,
 		// Include the custom logic from the pallet-template in the runtime.
-		TemplateModule: pallet_template,
 		Escrow: escrow,
 	}
 );
@@ -342,7 +333,6 @@ mod benches {
 		[frame_system, SystemBench::<Runtime>]
 		[pallet_balances, Balances]
 		[pallet_timestamp, Timestamp]
-		[pallet_template, TemplateModule]
 		[escrow, Escrow]
 	);
 }

@@ -11,9 +11,18 @@
   <component name="ChangeListManager">
     <list default="true" id="0f94cc98-2443-42bd-b46d-4130d0942d61" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cargo.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.toml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pallets/escrow/src/lib.rs" beforeDir="false" afterPath="$PROJECT_DIR$/pallets/escrow/src/lib.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pallets/escrow/src/mock.rs" beforeDir="false" afterPath="$PROJECT_DIR$/pallets/escrow/src/mock.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pallets/escrow/src/tests.rs" beforeDir="false" afterPath="$PROJECT_DIR$/pallets/escrow/src/tests.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pallets/template/Cargo.toml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pallets/template/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pallets/template/src/benchmarking.rs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pallets/template/src/lib.rs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pallets/template/src/mock.rs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pallets/template/src/tests.rs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pallets/weight.rs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/runtime/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/runtime/Cargo.toml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/runtime/src/lib.rs" beforeDir="false" afterPath="$PROJECT_DIR$/runtime/src/lib.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -128,7 +137,7 @@
       <workItem from="1662145408602" duration="46000" />
       <workItem from="1662145478937" duration="45812000" />
       <workItem from="1662331869467" duration="15150000" />
-      <workItem from="1662418815646" duration="1949000" />
+      <workItem from="1662418815646" duration="6163000" />
     </task>
     <servers />
   </component>
@@ -151,7 +160,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/pallets/escrow/src/lib.rs</url>
-          <line>119</line>
+          <line>109</line>
           <option name="timeStamp" value="1" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
@@ -161,12 +170,12 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/pallets/escrow/src/lib.rs</url>
-          <line>153</line>
+          <line>143</line>
           <option name="timeStamp" value="4" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/pallets/escrow/src/lib.rs</url>
-          <line>151</line>
+          <line>141</line>
           <option name="timeStamp" value="5" />
         </line-breakpoint>
       </breakpoints>

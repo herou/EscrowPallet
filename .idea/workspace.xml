@@ -11,18 +11,7 @@
   <component name="ChangeListManager">
     <list default="true" id="0f94cc98-2443-42bd-b46d-4130d0942d61" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cargo.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.toml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pallets/escrow/src/lib.rs" beforeDir="false" afterPath="$PROJECT_DIR$/pallets/escrow/src/lib.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pallets/template/Cargo.toml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pallets/template/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pallets/template/src/benchmarking.rs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pallets/template/src/lib.rs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pallets/template/src/mock.rs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pallets/template/src/tests.rs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pallets/weight.rs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/runtime/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/runtime/Cargo.toml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/runtime/src/lib.rs" beforeDir="false" afterPath="$PROJECT_DIR$/runtime/src/lib.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -62,7 +51,7 @@
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
     &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
     &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/elioprifti/substrate-node-template/pallets&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/elioprifti/escrow-node&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
     &quot;org.rust.cargo.project.model.PROJECT_DISCOVERY&quot;: &quot;true&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;language.rust.cargo.check&quot;
@@ -138,6 +127,10 @@
       <workItem from="1662145478937" duration="45812000" />
       <workItem from="1662331869467" duration="15150000" />
       <workItem from="1662418815646" duration="6163000" />
+      <workItem from="1662454222869" duration="265000" />
+      <workItem from="1662454497682" duration="245000" />
+      <workItem from="1662454749294" duration="4804000" />
+      <workItem from="1662574898193" duration="492000" />
     </task>
     <servers />
   </component>
@@ -170,12 +163,12 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/pallets/escrow/src/lib.rs</url>
-          <line>143</line>
+          <line>151</line>
           <option name="timeStamp" value="4" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/pallets/escrow/src/lib.rs</url>
-          <line>141</line>
+          <line>148</line>
           <option name="timeStamp" value="5" />
         </line-breakpoint>
       </breakpoints>

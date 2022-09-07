@@ -101,7 +101,7 @@ pub mod pallet {
 		NoValueStored,
 		/// Expiring Date was wrong/older than current date
 		WrongExpiringDate,
-		/// Means the contract is signed by the same people
+		/// Contract is signed by the same addresses
 		SameAddressError
 	}
 
@@ -117,9 +117,12 @@ pub mod pallet {
 			work_days: u64,
 			take_action_days: u64,
 		) -> DispatchResultWithPostInfo {
+			// Check if Tx is signed
 			let from = ensure_signed(origin)?;
+			// Check if the sender and receiver have not the same address
 			ensure!(from != to, Error::<T>::SameAddressError);
 
+			// calculate how many blocks per day gets generated
 			let prod_block_per_sec = 6;
 			let day_per_second = 86400;
 			let prod_block_per_day = day_per_second / prod_block_per_sec;
@@ -128,6 +131,7 @@ pub mod pallet {
 			let work_days_in_block_number = current_block_number + (work_days * prod_block_per_day);
 			let take_action_days_in_block = work_days_in_block_number + (take_action_days * prod_block_per_day);
 
+			//Creating a Contract object
 			let contract = Contract {
 				origin: from.clone(),
 				to: to.clone(),
@@ -137,11 +141,17 @@ pub mod pallet {
 				take_action_days_in_block: take_action_days_in_block.clone(),
 			};
 
+			// Save in storage the sender and the contract
 			<ContractSender<T>>::insert(from.clone(), &contract);
+			// Save in storage the reciever and the contract
 			<ContractReceiver<T>>::insert(to.clone(), contract);
+			//Throw Contract event
 			Self::deposit_event(Event::ContractEvent(from.clone(), to, amount.clone(), current_block_number, work_days_in_block_number, take_action_days_in_block));
 
+			//Lock the funds
 			T::Currency::set_lock(EXAMPLE_ID, &from, amount.clone(), WithdrawReasons::all());
+
+			//Thrown Lock event
 			Self::deposit_event(Event::Locked(from, amount));
 
 			Ok(().into())

@@ -62,23 +62,17 @@ pub mod pallet {
 		pub take_action_days_in_block: u64,
 	}
 
-	impl<Origin, AccountId, Amount> Default for Contract<Origin, AccountId, Amount> {
-		fn default() -> Self {
-			Self::default()
-		}
-	}
-
 
 	#[pallet::storage]
 	#[pallet::getter(fn contract_sender)]
 	pub(super) type ContractSender<T: Config> =
-	StorageMap<_, Blake2_128Concat, T::AccountId, Contract<T::AccountId, T::AccountId, BalanceOf<T>>, ValueQuery>;
+	StorageMap<_, Blake2_128Concat, T::AccountId, Contract<T::AccountId, T::AccountId, BalanceOf<T>>, OptionQuery>;
 
 
 	#[pallet::storage]
 	#[pallet::getter(fn contract_receiver)]
 	pub(super) type ContractReceiver<T: Config> =
-	StorageMap<_, Blake2_128Concat, T::AccountId, Contract<T::AccountId, T::AccountId, BalanceOf<T>>, ValueQuery>;
+	StorageMap<_, Blake2_128Concat, T::AccountId, Contract<T::AccountId, T::AccountId, BalanceOf<T>>, OptionQuery>;
 
 	#[pallet::event]
 	#[pallet::generate_deposit(pub(super) fn deposit_event)]

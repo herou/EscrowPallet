@@ -27,7 +27,7 @@ benchmarks! {
 	}: _(RawOrigin::Signed(caller.clone()), to, amount.clone(), work_days, take_action_days)
 	verify {
 
-	// assert_last_event::<T>(Event::Locked(caller, amount).into());
+	 assert_last_event::<T>(Event::Locked(caller, amount).into());
 	}
 
 	impl_benchmark_test_suite!(Template, crate::mock::new_test_ext(), crate::mock::Test);

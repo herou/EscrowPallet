@@ -81,9 +81,9 @@ fn sign_contract_test3() {
             take_action_days_in_block: 290332800,
         };
 
-        assert_eq!(Escrow::contract_sender(ALICE), contract.clone());
+        assert_eq!(Escrow::contract_sender(ALICE), Some(contract.clone()));
 
-        assert_eq!(Escrow::contract_receiver(BOB), contract.clone());
+        assert_eq!(Escrow::contract_receiver(BOB), Some(contract.clone()));
 
     })
 }

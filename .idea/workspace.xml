@@ -11,9 +11,7 @@
   <component name="ChangeListManager">
     <list default="true" id="0f94cc98-2443-42bd-b46d-4130d0942d61" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pallets/escrow/src/benchmarking.rs" beforeDir="false" afterPath="$PROJECT_DIR$/pallets/escrow/src/benchmarking.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pallets/escrow/src/lib.rs" beforeDir="false" afterPath="$PROJECT_DIR$/pallets/escrow/src/lib.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pallets/escrow/src/tests.rs" beforeDir="false" afterPath="$PROJECT_DIR$/pallets/escrow/src/tests.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/docker_run.sh" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/docker_run.sh" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -155,7 +153,7 @@
       <workItem from="1662454497682" duration="245000" />
       <workItem from="1662454749294" duration="4804000" />
       <workItem from="1662574898193" duration="492000" />
-      <workItem from="1662590589584" duration="8193000" />
+      <workItem from="1662590589584" duration="12537000" />
     </task>
     <servers />
   </component>

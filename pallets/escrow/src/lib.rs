@@ -1,3 +1,20 @@
+//! # Escrow Pallet
+//!
+//! We aim to build a Escrow pallet which will help communities to release funds easier to devs/teams.
+//! I would like to explain the purpose of the project with a real example.
+//! A developer wants to fix/develop a bug/feature. He requested some funds and his proposal got approved.
+//! Both of the parties (for ex: web3 community and contributor) sign an Escrow contract by defining the Web3 community address, the contributor address, the amount, the expiry date, and “take action days”.
+//! “Take action days” would be some supplement time after the contract has ended for the Web3 to test/check if the bug/feature has been delivered correctly.
+//! Once the contract is signed the Web3 funds will be locked into another address.
+//! During the take action days Web3 can decide to:
+//! 1-Send the funds manually to the contributor 2-Withdraw the funds because nothing was delivered 3-Do not take any action during the “take action days” and when these additive days are expired the contributor can withdraw the funds by himself.
+//! (This option would reduce the releasing fund steps by giving additional work to the contributor)
+//!
+//! ### Dispatchable Functions
+//! #### Role setting
+//!
+//! * `sign_contract` -It is used to sign an Escrow contract between two users.
+
 #![cfg_attr(not(feature = "std"), no_std)]
 #![allow(clippy::unused_unit)]
 

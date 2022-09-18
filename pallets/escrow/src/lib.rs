@@ -224,7 +224,7 @@ pub mod pallet {
 
 
 		/// Send funds
-		#[pallet::weight(10_000)]
+		#[pallet::weight(T::WeightInfo::send_funds())]
 		pub fn send_funds(
 			origin: OriginFor<T>
 		) -> DispatchResultWithPostInfo {

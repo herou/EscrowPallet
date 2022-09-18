@@ -8,8 +8,7 @@ use frame_benchmarking::{benchmarks, account, whitelisted_caller};
 use frame_system::{EventRecord, RawOrigin};
 use crate::Event;
 use frame_support::{assert_ok, sp_runtime::traits::Bounded};
-use core::convert::TryInto;
-
+use frame_support::sp_runtime::traits::Saturating;
 
 
 fn assert_last_event<T: Config>(generic_event: <T as Config>::Event) {
@@ -40,6 +39,10 @@ benchmarks! {
 	  	let work_days: u64 = 5761;
 		let take_action_days: u64 = 14401;
 
+		let val: BalanceOf<T> = 1_000_000_000u32.into();
+		T::Currency::make_free_balance_be(&caller, val.saturating_mul(4_000_000_000u32.into()));
+		T::Currency::make_free_balance_be(&to, val.saturating_mul(4_000_000_000u32.into()));
+
           assert_ok!(
 			Escrow::<T>::sign_contract(RawOrigin::Signed(caller.clone()).into(), to.clone(), amount, work_days, take_action_days)
 		);
@@ -63,13 +66,17 @@ benchmarks! {
 		assert_eq!(Escrow::<T>::contract_receiver(to), Some(contract.clone()));
 	}
 
-/*
+
     send_funds {
 		let to: T::AccountId = account("receiver", 0, 0);
-		let amount = BalanceOf::<T>::max_value();
+		let amount: BalanceOf<T> = 4000u32.into();
 		let caller: T::AccountId = whitelisted_caller();
 	  	let work_days: u64 = 5761;
 		let take_action_days: u64 = 14401;
+
+		let val: BalanceOf<T> = 1_000_000_000u32.into();
+		T::Currency::make_free_balance_be(&caller, val.saturating_mul(4_000_000_000u32.into()));
+		T::Currency::make_free_balance_be(&to, val.saturating_mul(4_000_000_000u32.into()));
 
           assert_ok!(
 			Escrow::<T>::sign_contract(RawOrigin::Signed(caller.clone()).into(), to.clone(), amount, work_days, take_action_days)
@@ -85,17 +92,16 @@ benchmarks! {
             take_action_days_in_block: 290332800,
         };
 
-		//let block_number: i32 = 82958400;
-		// System::<T>::set_block_number(82958400);
-		//frame_system::Pallet::<T>::set_block_number(block_number.try_into());
+		let block_number: u32 = 82958400;
+		frame_system::Pallet::<T>::set_block_number(block_number.into());
 
 	}: _(RawOrigin::Signed(caller.clone()))
 	verify {
 
-	//	assert_eq!(Escrow::<T>::contract_sender(caller), Some(contract.clone()));
-	//	assert_eq!(Escrow::<T>::contract_receiver(to), Some(contract.clone()));
+       	assert_eq!(Escrow::<T>::contract_sender(caller), Some(contract.clone()));
 	}
-*/
+
+
 	impl_benchmark_test_suite!(Escrow, crate::mock::new_test_ext(), crate::mock::Test);
 }
 

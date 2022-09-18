@@ -34,7 +34,9 @@ use sp_std::marker::PhantomData;
 
 pub trait WeightInfo {
 	fn sign_contract() -> Weight;
+	fn withdraw_funds() -> Weight;
 }
+
 /// Weight functions for `escrow`.
 pub struct SubstrateWeight<T>(PhantomData<T>);
 impl<T: frame_system::Config> WeightInfo for SubstrateWeight<T> {
@@ -45,5 +47,11 @@ impl<T: frame_system::Config> WeightInfo for SubstrateWeight<T> {
 		(28_000_000 as Weight)
 			.saturating_add(T::DbWeight::get().reads(1 as Weight))
 			.saturating_add(T::DbWeight::get().writes(3 as Weight))
+	}
+	// Storage: Escrow ContractSender (r:1 w:0)
+	// Storage: Escrow ContractReceiver (r:1 w:0)
+	fn withdraw_funds() -> Weight {
+		(11_000_000 as Weight)
+			.saturating_add(T::DbWeight::get().reads(2 as Weight))
 	}
 }

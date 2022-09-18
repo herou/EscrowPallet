@@ -83,6 +83,17 @@ impl Config for Test {
     type WeightInfo = escrow::weights::SubstrateWeight<Test>;
 }
 
+
 pub fn new_test_ext() -> TestExternalities {
-    frame_system::GenesisConfig::default().build_storage::<Test>().unwrap().into()
+    let mut t = frame_system::GenesisConfig::default()
+        .build_storage::<Test>()
+        .unwrap();
+    pallet_balances::GenesisConfig::<Test> {
+        // Provide some initial balances
+        balances: vec![(1, 10000), (2, 11000), (3, 12000), (4, 13000), (5, 14000)],
+    }
+        .assimilate_storage(&mut t)
+        .unwrap();
+    let mut ext: sp_io::TestExternalities = t.into();
+    ext
 }

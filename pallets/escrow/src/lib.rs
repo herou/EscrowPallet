@@ -139,7 +139,7 @@ pub mod pallet {
 			let prod_block_per_day = day_per_second / prod_block_per_sec;
 
 			let current_block_number: u64 = frame_system::Pallet::<T>::block_number().try_into().unwrap_or(0);
-			let work_days_in_block_number = current_block_number + (work_days * prod_block_per_day);
+			let work_days_in_block_number = current_block_number + (work_days * prod_block_per_day.clone());
 			let take_action_days_in_block = work_days_in_block_number + (take_action_days * prod_block_per_day);
 
 			//Creating a Contract object
@@ -168,9 +168,8 @@ pub mod pallet {
 			Ok(().into())
 		}
 
-/*
 		/// Withdraw funds
-		#[pallet::weight(10_000)]
+		#[pallet::weight(T::WeightInfo::withdraw_funds())]
 		pub fn withdraw_funds(
 			origin: OriginFor<T>,
 		) -> DispatchResultWithPostInfo {
@@ -183,40 +182,47 @@ pub mod pallet {
 
 			// When is period of take action day, sender can unlock their funds
 			if <ContractSender<T>>::contains_key(&from) {
-				let current_block_number: u64 = frame_system::Pallet::<T>::block_number().try_into().unwrap_or(0);
-				let work_days_in_block_number = <ContractSender<T>>::get(&from).work_days_in_block_number;
-				let take_action_days_in_block = <ContractSender<T>>::get(&from).take_action_days_in_block;
-				let amount = <ContractSender<T>>::get(from.clone()).amount;
+				let maybe_contract_sender = <ContractSender<T>>::get(&from);
+				if let Some(contract_sender) = maybe_contract_sender {
 
-				if current_block_number >= work_days_in_block_number && current_block_number <= take_action_days_in_block {
-					T::Currency::remove_lock(EXAMPLE_ID, &from);
-					Self::deposit_event(Event::UnLock(from.clone(), amount));
+					let current_block_number: u64 = frame_system::Pallet::<T>::block_number().try_into().unwrap_or(0);
+					let work_days_in_block_number = contract_sender.work_days_in_block_number;
+					let take_action_days_in_block = contract_sender.take_action_days_in_block;
+					let amount = contract_sender.amount;
+
+					if current_block_number >= work_days_in_block_number && current_block_number <= take_action_days_in_block {
+						T::Currency::remove_lock(EXAMPLE_ID, &from);
+						Self::deposit_event(Event::UnLock(from.clone(), amount));
+					}
 				}
 			}
 
 			// When take action day is expired, receiver can withdraw funds by himself
 			if <ContractReceiver<T>>::contains_key(&from) {
-				let current_block_number: u64 = frame_system::Pallet::<T>::block_number().try_into().unwrap_or(0);
-				let work_days_in_block_number = <ContractReceiver<T>>::get(&from).work_days_in_block_number;
-				let take_action_days_in_block = <ContractReceiver<T>>::get(&from).take_action_days_in_block;
+				let maybe_contract_receiver = <ContractReceiver<T>>::get(&from);
+				if let Some(contract_receiver) = maybe_contract_receiver {
+					let current_block_number: u64 = frame_system::Pallet::<T>::block_number().try_into().unwrap_or(0);
+					let work_days_in_block_number = contract_receiver.work_days_in_block_number;
+					let take_action_days_in_block = contract_receiver.take_action_days_in_block;
 
-				if current_block_number > work_days_in_block_number + take_action_days_in_block {
-					let to = <ContractReceiver<T>>::get(&from).origin;
-					let from = <ContractReceiver<T>>::get(&from).to;
-					let amount = <ContractReceiver<T>>::get(from.clone()).amount;
+					if current_block_number > work_days_in_block_number + take_action_days_in_block {
+						let to = contract_receiver.origin;
+						let from = contract_receiver.to;
+						let amount = contract_receiver.amount;
 
-					T::Currency::remove_lock(EXAMPLE_ID, &from);
-					Self::deposit_event(Event::UnLock(from.clone(), amount.clone()));
+						T::Currency::remove_lock(EXAMPLE_ID, &from);
+						Self::deposit_event(Event::UnLock(from.clone(), amount.clone()));
 
-					T::Currency::transfer(&from, &to, amount, AllowDeath)?;
-					Self::deposit_event(Event::Transfer(from, to,amount));
+						T::Currency::transfer(&from, &to, amount, AllowDeath)?;
+						Self::deposit_event(Event::Transfer(from, to, amount));
+					}
 				}
 			}
 
 			Ok(().into())
-		} */
+		}
 
-		/*
+
 		/// Send funds
 		#[pallet::weight(10_000)]
 		pub fn send_funds(
@@ -231,24 +237,27 @@ pub mod pallet {
 
                 // When is take action day/ take action day is expired, only sender can send funds to the receiver
                 if <ContractSender<T>>::contains_key(&from) {
-                    let current_block_number: u64 = frame_system::Pallet::<T>::block_number().try_into().unwrap_or(0);
-                    let work_days_in_block_number = <ContractSender<T>>::get(&from).work_days_in_block_number;
-                    let take_action_days_in_block = <ContractSender<T>>::get(&from).take_action_days_in_block;
+					let maybe_contract_sender = <ContractSender<T>>::get(&from);
+					if let Some(contract_sender) = maybe_contract_sender {
 
-                    if current_block_number >= work_days_in_block_number {
-                        let entry = <ContractSender<T>>::get(from.clone());
-                        let to = entry.to;
-                        let amount = entry.amount;
+						let current_block_number: u64 = frame_system::Pallet::<T>::block_number().try_into().unwrap_or(0);
+						let work_days_in_block_number = contract_sender.work_days_in_block_number;
 
-                        T::Currency::remove_lock(EXAMPLE_ID, &from);
-                        Self::deposit_event(Event::UnLock(from.clone(), amount.clone()));
+						if current_block_number >= work_days_in_block_number {
+							//let entry = <ContractSender<T>>::get(from.clone());
+							let to = contract_sender.to;
+							let amount = contract_sender.amount;
 
-                        T::Currency::transfer(&from, &to, amount, AllowDeath)?;
-                        Self::deposit_event(Event::Transfer(from, to,amount));
-                    }
-                }
+							T::Currency::remove_lock(EXAMPLE_ID, &from);
+							Self::deposit_event(Event::UnLock(from.clone(), amount.clone()));
+
+							T::Currency::transfer(&from, &to, amount, AllowDeath)?;
+							Self::deposit_event(Event::Transfer(from, to, amount));
+						}
+					}
+				}
 
 			Ok(().into())
-		} */
+		}
 	}
 }

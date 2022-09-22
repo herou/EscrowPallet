@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="CMakePresetLoader"><![CDATA[{
+  "useNewFormat": true
+}]]></component>
   <component name="CMakeSettings">
     <configurations>
       <configuration PROFILE_NAME="Debug" ENABLED="true" CONFIG_NAME="Debug" />
@@ -9,9 +15,12 @@
     <cargoProject FILE="$PROJECT_DIR$/Cargo.toml" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0f94cc98-2443-42bd-b46d-4130d0942d61" name="Changes" comment="">
+    <list default="true" id="c5eea340-f453-4a19-9afb-22ff8df5c5d5" name="Changes" comment="- test">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/docker_run.sh" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/docker_run.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pallets/escrow/src/benchmarking.rs" beforeDir="false" afterPath="$PROJECT_DIR$/pallets/escrow/src/benchmarking.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pallets/escrow/src/lib.rs" beforeDir="false" afterPath="$PROJECT_DIR$/pallets/escrow/src/lib.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pallets/escrow/src/tests.rs" beforeDir="false" afterPath="$PROJECT_DIR$/pallets/escrow/src/tests.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pallets/escrow/src/weights.rs" beforeDir="false" afterPath="$PROJECT_DIR$/pallets/escrow/src/weights.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -32,7 +41,7 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="MacroExpansionManager">
-    <option name="directoryName" value="q8r33kgk" />
+    <option name="directoryName" value="6vnqfkp0" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -65,7 +74,13 @@
       <recent name="$PROJECT_DIR$/pallets/escrow/src" />
     </key>
   </component>
-  <component name="RunManager" selected="Cargo.Run">
+  <component name="RunAnythingCache">
+    <option name="myCommands">
+      <command value="cargo check" />
+      <command value="cargo run --bin kitchen-node -- --dev --tmp" />
+    </option>
+  </component>
+  <component name="RunManager" selected="Cargo.run">
     <configuration name="Run" type="CargoCommandRunConfiguration" factoryName="Cargo Command" nameIsGenerated="true">
       <option name="command" value="run --release -- --dev --tmp" />
       <option name="workingDirectory" value="file://$PROJECT_DIR$" />
@@ -117,44 +132,78 @@
         <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
       </method>
     </configuration>
+    <configuration name="check" type="CargoCommandRunConfiguration" factoryName="Cargo Command" temporary="true">
+      <option name="command" value="check" />
+      <option name="workingDirectory" value="file://$PROJECT_DIR$" />
+      <option name="channel" value="DEFAULT" />
+      <option name="requiredFeatures" value="true" />
+      <option name="allFeatures" value="false" />
+      <option name="emulateTerminal" value="false" />
+      <option name="withSudo" value="false" />
+      <option name="buildTarget" value="REMOTE" />
+      <option name="backtrace" value="SHORT" />
+      <envs />
+      <option name="isRedirectInput" value="false" />
+      <option name="redirectInputPath" value="" />
+      <method v="2">
+        <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="run" type="CargoCommandRunConfiguration" factoryName="Cargo Command" temporary="true">
+      <option name="command" value="run --bin kitchen-node -- --dev --tmp" />
+      <option name="workingDirectory" value="file://$PROJECT_DIR$" />
+      <option name="channel" value="DEFAULT" />
+      <option name="requiredFeatures" value="true" />
+      <option name="allFeatures" value="false" />
+      <option name="emulateTerminal" value="false" />
+      <option name="withSudo" value="false" />
+      <option name="buildTarget" value="REMOTE" />
+      <option name="backtrace" value="SHORT" />
+      <envs />
+      <option name="isRedirectInput" value="false" />
+      <option name="redirectInputPath" value="" />
+      <method v="2">
+        <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
+      </method>
+    </configuration>
     <list>
       <item itemvalue="Cargo.Run" />
+      <item itemvalue="Cargo.check" />
+      <item itemvalue="Cargo.run" />
       <item itemvalue="Cargo.Test tests::sign_contract_test2" />
       <item itemvalue="Cargo.Test tests::sign_contract_test3" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Cargo.run" />
+        <item itemvalue="Cargo.check" />
         <item itemvalue="Cargo.Test tests::sign_contract_test3" />
         <item itemvalue="Cargo.Test tests::sign_contract_test2" />
       </list>
     </recent_temporary>
   </component>
   <component name="RustProjectSettings">
-    <option name="toolchainHomeDirectory" value="$PROJECT_DIR$/../.cargo/bin" />
+    <option name="toolchainHomeDirectory" value="$USER_HOME$/.cargo/bin" />
     <option name="version" value="2" />
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="0f94cc98-2443-42bd-b46d-4130d0942d61" name="Changes" comment="" />
-      <created>1662024470105</created>
+      <changelist id="c5eea340-f453-4a19-9afb-22ff8df5c5d5" name="Changes" comment="" />
+      <created>1663417428810</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1662024470105</updated>
-      <workItem from="1662024471645" duration="5990000" />
-      <workItem from="1662117870209" duration="343000" />
-      <workItem from="1662118218070" duration="7806000" />
-      <workItem from="1662132662304" duration="5485000" />
-      <workItem from="1662145408602" duration="46000" />
-      <workItem from="1662145478937" duration="45812000" />
-      <workItem from="1662331869467" duration="15150000" />
-      <workItem from="1662418815646" duration="6163000" />
-      <workItem from="1662454222869" duration="265000" />
-      <workItem from="1662454497682" duration="245000" />
-      <workItem from="1662454749294" duration="4804000" />
-      <workItem from="1662574898193" duration="492000" />
-      <workItem from="1662590589584" duration="12537000" />
+      <updated>1663417428810</updated>
+      <workItem from="1663417430166" duration="12997000" />
     </task>
+    <task id="LOCAL-00001" summary="- test">
+      <created>1663417578956</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1663417578956</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -171,14 +220,13 @@
       </map>
     </option>
   </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="- test" />
+    <option name="LAST_COMMIT_MESSAGE" value="- test" />
+  </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/pallets/escrow/src/lib.rs</url>
-          <line>103</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/runtime/src/lib.rs</url>
           <line>24</line>

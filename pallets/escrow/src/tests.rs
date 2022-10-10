@@ -119,6 +119,8 @@ fn withdraw_funds_test1() {
             take_action_days_in_block: 290332800,
         };
 
+        System::set_block_number(82958400);
+
         assert_ok!(Escrow::withdraw_funds(
 			origin.clone(),
         ));
@@ -139,7 +141,7 @@ fn withdraw_funds_test2() {
         assert_noop!(Escrow::withdraw_funds(
 			origin,
 		),
-			Error::<Test>::NoValueStored);
+			Error::<Test>::WrongAddress);
     })
 }
 
@@ -244,7 +246,7 @@ fn send_funds_test1() {
         assert_noop!(Escrow::send_funds(
 			origin,
 		),
-			Error::<Test>::NoValueStored);
+			Error::<Test>::WrongAddress);
     })
 
 }

@@ -108,12 +108,16 @@ pub mod pallet {
 
 	#[pallet::error]
 	pub enum Error<T> {
-		/// The requested user has not stored a value yet
-		NoValueStored,
+		/// Wrong address
+		WrongAddress,
 		/// Expiring Date was wrong/older than current date
 		WrongExpiringDate,
 		/// Contract is signed by the same addresses
-		SameAddressError
+		SameAddressError,
+		/// Working days have not expired
+		WorkingDaysNotExpired,
+		/// Take action days not expired
+		TakeActionDaysNotExpired
 	}
 
 	#[pallet::call]
@@ -177,23 +181,22 @@ pub mod pallet {
 
 			 ensure!(
 				<ContractSender<T>>::contains_key(&from) || <ContractReceiver<T>>::contains_key(&from),
-				Error::<T>::NoValueStored
+				Error::<T>::WrongAddress
 			);
 
 			// When is period of take action day, sender can unlock their funds
 			if <ContractSender<T>>::contains_key(&from) {
 				let maybe_contract_sender = <ContractSender<T>>::get(&from);
 				if let Some(contract_sender) = maybe_contract_sender {
-
 					let current_block_number: u64 = frame_system::Pallet::<T>::block_number().try_into().unwrap_or(0);
 					let work_days_in_block_number = contract_sender.work_days_in_block_number;
 					let take_action_days_in_block = contract_sender.take_action_days_in_block;
 					let amount = contract_sender.amount;
 
-					if current_block_number >= work_days_in_block_number && current_block_number <= take_action_days_in_block {
-						T::Currency::remove_lock(EXAMPLE_ID, &from);
-						Self::deposit_event(Event::UnLock(from.clone(), amount));
-					}
+					ensure!(current_block_number >= work_days_in_block_number && current_block_number <= take_action_days_in_block, Error::<T>::WorkingDaysNotExpired);
+
+					T::Currency::remove_lock(EXAMPLE_ID, &from);
+					Self::deposit_event(Event::UnLock(from.clone(), amount));
 				}
 			}
 
@@ -205,17 +208,17 @@ pub mod pallet {
 					let work_days_in_block_number = contract_receiver.work_days_in_block_number;
 					let take_action_days_in_block = contract_receiver.take_action_days_in_block;
 
-					if current_block_number > work_days_in_block_number + take_action_days_in_block {
-						let to = contract_receiver.origin;
-						let from = contract_receiver.to;
-						let amount = contract_receiver.amount;
+					ensure!(current_block_number > work_days_in_block_number + take_action_days_in_block, Error::<T>::TakeActionDaysNotExpired);
 
-						T::Currency::remove_lock(EXAMPLE_ID, &from);
-						Self::deposit_event(Event::UnLock(from.clone(), amount.clone()));
+					let to = contract_receiver.origin;
+					let from = contract_receiver.to;
+					let amount = contract_receiver.amount;
 
-						T::Currency::transfer(&from, &to, amount, AllowDeath)?;
-						Self::deposit_event(Event::Transfer(from, to, amount));
-					}
+					T::Currency::remove_lock(EXAMPLE_ID, &from);
+					Self::deposit_event(Event::UnLock(from.clone(), amount.clone()));
+
+					T::Currency::transfer(&from, &to, amount, AllowDeath)?;
+					Self::deposit_event(Event::Transfer(from, to, amount));
 				}
 			}
 
@@ -232,30 +235,28 @@ pub mod pallet {
 
 				ensure!(
                     <ContractSender<T>>::contains_key(&from),
-                    Error::<T>::NoValueStored
+                    Error::<T>::WrongAddress
                 );
 
                 // When is take action day/ take action day is expired, only sender can send funds to the receiver
-                if <ContractSender<T>>::contains_key(&from) {
-					let maybe_contract_sender = <ContractSender<T>>::get(&from);
-					if let Some(contract_sender) = maybe_contract_sender {
+			if <ContractSender<T>>::contains_key(&from) {
+				let maybe_contract_sender = <ContractSender<T>>::get(&from);
+				if let Some(contract_sender) = maybe_contract_sender {
+					let current_block_number: u64 = frame_system::Pallet::<T>::block_number().try_into().unwrap_or(0);
+					let work_days_in_block_number = contract_sender.work_days_in_block_number;
 
-						let current_block_number: u64 = frame_system::Pallet::<T>::block_number().try_into().unwrap_or(0);
-						let work_days_in_block_number = contract_sender.work_days_in_block_number;
+					ensure!(current_block_number >= work_days_in_block_number, Error::<T>::WorkingDaysNotExpired);
 
-						if current_block_number >= work_days_in_block_number {
-							//let entry = <ContractSender<T>>::get(from.clone());
-							let to = contract_sender.to;
-							let amount = contract_sender.amount;
+					let to = contract_sender.to;
+					let amount = contract_sender.amount;
 
-							T::Currency::remove_lock(EXAMPLE_ID, &from);
-							Self::deposit_event(Event::UnLock(from.clone(), amount.clone()));
+					T::Currency::remove_lock(EXAMPLE_ID, &from);
+					Self::deposit_event(Event::UnLock(from.clone(), amount.clone()));
 
-							T::Currency::transfer(&from, &to, amount, AllowDeath)?;
-							Self::deposit_event(Event::Transfer(from, to, amount));
-						}
-					}
+					T::Currency::transfer(&from, &to, amount, AllowDeath)?;
+					Self::deposit_event(Event::Transfer(from, to, amount));
 				}
+			}
 
 			Ok(().into())
 		}

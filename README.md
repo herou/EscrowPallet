@@ -1,6 +1,6 @@
 # Substrate Escrow pallet
 
-[![Try on playground](https://img.shields.io/badge/Playground-Node_Template-brightgreen?logo=Parity%20Substrate)](https://docs.substrate.io/playground/) [![Matrix](https://img.shields.io/matrix/substrate-technical:matrix.org)](https://matrix.to/#/#substrate-technical:matrix.org)
+[<img alt="github" src="https://img.shields.io/badge/github-brson/wasm--opt--rs-8da0cb?style=for-the-badge&labelColor=555555&logo=github" height="20">](https://github.com/herou/EscrowPallet).
 
 A fresh FRAME-based [Substrate](https://www.substrate.io/) node, ready for hacking :rocket:
 

@@ -1,6 +1,6 @@
 # Substrate Escrow pallet
 
-[<img alt="github" src="https://img.shields.io/badge/github-brson/wasm--opt--rs-8da0cb?style=for-the-badge&labelColor=555555&logo=github" height="20">](https://github.com/herou/EscrowPallet).
+[<img alt="github" height="20">](https://github.com/herou/EscrowPallet).
 
 A fresh FRAME-based [Substrate](https://www.substrate.io/) node, ready for hacking :rocket:
 

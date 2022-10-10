@@ -4,10 +4,13 @@
 - The Escrow pallet will help the web3 communities to release funds easier.
 - I will use substrate framework to build this pallet.
 
-## Run the app
+## Installation
 
 ```
-cargo run --bin kitchen-node -- --dev --tmp
+# Clone the repository
+git clone https://github.com/herou/EscrowPallet
+git checkout eljo-prifti/escrow   
+cargo run --release -- --dev --tmp
 ```
 
 

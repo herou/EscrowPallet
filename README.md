@@ -9,7 +9,7 @@
 ```
 # Clone the repository
 git clone https://github.com/herou/EscrowPallet
-git checkout eljo-prifti/escrow   
+git checkout eljo-prifti/escrow_milestone_2_and_3   
 cargo run --release -- --dev --tmp
 ```
 

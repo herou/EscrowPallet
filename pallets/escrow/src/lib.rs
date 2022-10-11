@@ -143,17 +143,17 @@ pub mod pallet {
 			let prod_block_per_day = day_per_second / prod_block_per_sec;
 
 			let current_block_number: u64 = frame_system::Pallet::<T>::block_number().try_into().unwrap_or(0);
-			let work_days_in_block_number = current_block_number + (work_days * prod_block_per_day.clone());
+			let work_days_in_block_number = current_block_number + (work_days * prod_block_per_day);
 			let take_action_days_in_block = work_days_in_block_number + (take_action_days * prod_block_per_day);
 
 			//Creating a Contract object
 			let contract = Contract {
 				origin: from.clone(),
 				to: to.clone(),
-				amount: amount.clone(),
-				current_block_number: current_block_number.clone(),
-				work_days_in_block_number: work_days_in_block_number.clone(),
-				take_action_days_in_block: take_action_days_in_block.clone(),
+				amount,
+				current_block_number,
+				work_days_in_block_number,
+				take_action_days_in_block,
 			};
 
 			// Save in storage the sender and the contract
@@ -161,10 +161,10 @@ pub mod pallet {
 			// Save in storage the reciever and the contract
 			<ContractReceiver<T>>::insert(to.clone(), contract);
 			//Throw Contract event
-			Self::deposit_event(Event::ContractEvent(from.clone(), to, amount.clone(), current_block_number, work_days_in_block_number, take_action_days_in_block));
+			Self::deposit_event(Event::ContractEvent(from.clone(), to, amount, current_block_number, work_days_in_block_number, take_action_days_in_block));
 
 			//Lock the funds
-			T::Currency::set_lock(EXAMPLE_ID, &from, amount.clone(), WithdrawReasons::all());
+			T::Currency::set_lock(EXAMPLE_ID, &from, amount, WithdrawReasons::all());
 
 			//Thrown Lock event
 			Self::deposit_event(Event::Locked(from, amount));
@@ -215,7 +215,7 @@ pub mod pallet {
 					let amount = contract_receiver.amount;
 
 					T::Currency::remove_lock(EXAMPLE_ID, &from);
-					Self::deposit_event(Event::UnLock(from.clone(), amount.clone()));
+					Self::deposit_event(Event::UnLock(from.clone(), amount));
 
 					T::Currency::transfer(&from, &to, amount, AllowDeath)?;
 					Self::deposit_event(Event::Transfer(from, to, amount));
@@ -251,7 +251,7 @@ pub mod pallet {
 					let amount = contract_sender.amount;
 
 					T::Currency::remove_lock(EXAMPLE_ID, &from);
-					Self::deposit_event(Event::UnLock(from.clone(), amount.clone()));
+					Self::deposit_event(Event::UnLock(from.clone(), amount));
 
 					T::Currency::transfer(&from, &to, amount, AllowDeath)?;
 					Self::deposit_event(Event::Transfer(from, to, amount));

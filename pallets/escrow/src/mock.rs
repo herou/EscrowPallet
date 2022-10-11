@@ -1,14 +1,10 @@
-use frame_system::Origin as OtherOrigin;
-use crate::{self as escrow, BalanceOf, Config, Contract};
-use frame_support::{assert_noop, assert_ok, construct_runtime, parameter_types};
-use frame_support::traits::ExistenceRequirement;
-use frame_support::traits::ExistenceRequirement::AllowDeath;
+use crate::{self as escrow, Config};
+use frame_support::{construct_runtime, parameter_types};
 use sp_core::H256;
-use crate::Error;
 use sp_io::TestExternalities;
 use sp_runtime::{
     testing::Header,
-    traits::{AtLeast32Bit, BlakeTwo256, IdentityLookup},
+    traits::{BlakeTwo256, IdentityLookup},
 };
 
 use core::convert::*;
@@ -94,6 +90,6 @@ pub fn new_test_ext() -> TestExternalities {
     }
         .assimilate_storage(&mut t)
         .unwrap();
-    let mut ext: sp_io::TestExternalities = t.into();
+    let ext: sp_io::TestExternalities = t.into();
     ext
 }

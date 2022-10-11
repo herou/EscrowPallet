@@ -1,7 +1,5 @@
-use crate::{mock::*, Error, Config, Event, mock, pallet};
+use crate::{mock::*, Error, Event};
 use frame_support::{assert_noop, assert_ok};
-use frame_support::traits::LockIdentifier;
-use frame_system::EventRecord;
 use crate::Contract;
 
 

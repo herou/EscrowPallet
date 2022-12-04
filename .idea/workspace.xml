@@ -3,9 +3,9 @@
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
-  <component name="CMakePresetLoader"><![CDATA[{
-  "useNewFormat": true
-}]]></component>
+  <component name="CMakePresetLoader">{
+  &quot;useNewFormat&quot;: true
+}</component>
   <component name="CMakeSettings">
     <configurations>
       <configuration PROFILE_NAME="Debug" ENABLED="true" CONFIG_NAME="Debug" />
@@ -16,15 +16,9 @@
     <cargoProject FILE="$PROJECT_DIR$/pallets/invoice/Cargo/Cargo.toml" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0f94cc98-2443-42bd-b46d-4130d0942d61" name="Changes" comment="&#10;- first commit">
-      <change afterPath="$PROJECT_DIR$/pallets/invoice/Cargo.toml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pallets/invoice/src/lib.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/substrate-node-template.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/substrate-node-template.iml" afterDir="false" />
+    <list default="true" id="0f94cc98-2443-42bd-b46d-4130d0942d61" name="Changes" comment="&#10;- invoice system method 1">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cargo.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/runtime/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/runtime/Cargo.toml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/runtime/src/lib.rs" beforeDir="false" afterPath="$PROJECT_DIR$/runtime/src/lib.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/docker_run.sh" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/docker_run.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pallets/invoice/src/lib.rs" beforeDir="false" afterPath="$PROJECT_DIR$/pallets/invoice/src/lib.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -44,7 +38,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="fix_escrow_build1" />
+        <entry key="$PROJECT_DIR$" value="fix_escrow_build" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -64,21 +58,21 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.cidr.known.project.marker": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "cf.first.check.clang-format": "false",
-    "cidr.known.project.marker": "true",
-    "last_opened_file_path": "/Users/gertiprifti/CLionProjects/EscrowPallet2/pallets/invoice/src",
-    "nodejs_package_manager_path": "npm",
-    "org.rust.cargo.project.model.PROJECT_DISCOVERY": "true",
-    "org.rust.disableDetachedFileInspection/Users/gertiprifti/CLionProjects/EscrowPallet2/pallets/invoice/src/benchmarking.rs": "true",
-    "settings.editor.selected.configurable": "language.rust.cargo.check"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
+    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/gertiprifti/CLionProjects/EscrowPallet2/pallets/invoice/src&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;org.rust.cargo.project.model.PROJECT_DISCOVERY&quot;: &quot;true&quot;,
+    &quot;org.rust.disableDetachedFileInspection/Users/gertiprifti/CLionProjects/EscrowPallet2/pallets/invoice/src/benchmarking.rs&quot;: &quot;true&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;language.rust.cargo.check&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/pallets/invoice/src" />
@@ -92,7 +86,7 @@
   </component>
   <component name="RunManager" selected="Cargo.Run">
     <configuration name="Run" type="CargoCommandRunConfiguration" factoryName="Cargo Command" nameIsGenerated="true">
-      <option name="command" value="run --release -- --dev --tmp" />
+      <option name="command" value="run  -- --dev --tmp" />
       <option name="workingDirectory" value="file://$PROJECT_DIR$" />
       <option name="channel" value="DEFAULT" />
       <option name="requiredFeatures" value="true" />
@@ -245,7 +239,30 @@
       <workItem from="1663320539505" duration="10766000" />
       <workItem from="1663496568649" duration="11595000" />
       <workItem from="1665514674349" duration="1656000" />
+      <workItem from="1670168369954" duration="5584000" />
     </task>
+    <task id="LOCAL-00001" summary="&#10;- invoice system">
+      <created>1670148928242</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1670148928242</updated>
+    </task>
+    <task id="LOCAL-00002" summary="&#10;- invoice system">
+      <created>1670148944698</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1670148944698</updated>
+    </task>
+    <task id="LOCAL-00003" summary="&#10;- invoice system method 1">
+      <created>1670152527603</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1670152527603</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -265,7 +282,9 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="- test" />
     <MESSAGE value="- added withdraw_funds method&#10;- added send_funds method" />
-    <option name="LAST_COMMIT_MESSAGE" value="- added withdraw_funds method&#10;- added send_funds method" />
+    <MESSAGE value="&#10;- invoice system" />
+    <MESSAGE value="&#10;- invoice system method 1" />
+    <option name="LAST_COMMIT_MESSAGE" value="&#10;- invoice system method 1" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -419,6 +438,46 @@
           <url>file://$PROJECT_DIR$/node/src/service.rs</url>
           <line>38</line>
           <option name="timeStamp" value="63" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/pallets/invoice/src/lib.rs</url>
+          <line>117</line>
+          <option name="timeStamp" value="80" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/pallets/invoice/src/lib.rs</url>
+          <line>118</line>
+          <option name="timeStamp" value="81" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/pallets/invoice/src/lib.rs</url>
+          <line>121</line>
+          <option name="timeStamp" value="82" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/pallets/invoice/src/lib.rs</url>
+          <line>122</line>
+          <option name="timeStamp" value="83" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/pallets/invoice/src/lib.rs</url>
+          <line>123</line>
+          <option name="timeStamp" value="85" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/pallets/invoice/src/lib.rs</url>
+          <line>108</line>
+          <option name="timeStamp" value="87" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/pallets/invoice/src/lib.rs</url>
+          <line>152</line>
+          <option name="timeStamp" value="88" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/pallets/invoice/src/lib.rs</url>
+          <line>151</line>
+          <option name="timeStamp" value="89" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

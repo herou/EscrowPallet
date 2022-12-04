@@ -6,22 +6,23 @@ use frame_support::traits::{Currency, LockIdentifier};
 pub use pallet::*;
 
 const EXAMPLE_ID: LockIdentifier = *b"example ";
+const ID: u8 = 100;
 
 type AccountIdOf<T> = <T as frame_system::Config>::AccountId;
 type BalanceOf<T> = <<T as Config>::Currency as Currency<AccountIdOf<T>>>::Balance;
-
 
 #[frame_support::pallet]
 pub mod pallet {
 	use frame_support::{dispatch::DispatchResultWithPostInfo, pallet_prelude::*};
 	use frame_system::pallet_prelude::*;
 	use core::convert::TryInto;
+	use sp_std::vec::Vec;
 
 	use frame_support::{
 		traits::{Currency, ExistenceRequirement::AllowDeath},
 	};
 	use frame_support::traits::{LockableCurrency, WithdrawReasons};
-	use crate::{BalanceOf, EXAMPLE_ID};
+	use crate::{BalanceOf, EXAMPLE_ID, ID};
 
 	/// Configure the pallet by specifying the parameters and types on which it depends.
 	#[pallet::config]
@@ -35,37 +36,46 @@ pub mod pallet {
 	}
 
 	#[pallet::pallet]
+	#[pallet::without_storage_info]
 	#[pallet::generate_store(pub (super) trait Store)]
 	pub struct Pallet<T>(PhantomData<T>);
 
 	#[pallet::hooks]
 	impl<T: Config> Hooks<T::BlockNumber> for Pallet<T> {}
 
-
-	#[derive(Clone, Copy, Encode, Decode, RuntimeDebug, PartialEq, Eq, MaxEncodedLen, TypeInfo)]
-	pub struct Contract<Origin, AccountId, Amount> {
+	#[derive(Encode, Decode, RuntimeDebug, PartialEq, Eq, TypeInfo)]
+	pub struct Invoice<Origin, AccountId, Amount> {
 		pub origin: Origin,
 		pub to: AccountId,
 		pub amount: Amount,
+		pub status: bool,
+		pub id: u64,
+		pub msg: Vec<u8>,
 	}
 
+	#[pallet::storage]
+	#[pallet::getter(fn invoice_sender)]
+	#[pallet::unbounded]
+	pub(super) type InvoiceSender<T: Config> =
+	StorageMap<_, Blake2_128Concat, T::AccountId, Vec<Invoice<T::AccountId, T::AccountId, BalanceOf<T>>>, OptionQuery>;
 
 	#[pallet::storage]
-	#[pallet::getter(fn contract_sender)]
-	pub(super) type ContractSender<T: Config> =
-	StorageMap<_, Blake2_128Concat, T::AccountId, Contract<T::AccountId, T::AccountId, BalanceOf<T>>, OptionQuery>;
-
+	#[pallet::getter(fn invoice_receiver)]
+	pub(super) type InvoiceReceiver<T: Config> =
+	StorageMap<_, Blake2_128Concat, T::AccountId, Vec<Invoice<T::AccountId, T::AccountId, BalanceOf<T>>>, OptionQuery>;
 
 	#[pallet::storage]
-	#[pallet::getter(fn contract_receiver)]
-	pub(super) type ContractReceiver<T: Config> =
-	StorageMap<_, Blake2_128Concat, T::AccountId, Contract<T::AccountId, T::AccountId, BalanceOf<T>>, OptionQuery>;
+	#[pallet::getter(fn simple_map)]
+	pub(super) type SimpleMap<T: Config> =
+	StorageMap<_, Blake2_128Concat, u8, u64, ValueQuery>;
 
 	#[pallet::event]
 	#[pallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
 		/// Create invoice
-		InvoiceEvent(T::AccountId, T::AccountId, BalanceOf<T>),
+		InvoiceEvent(T::AccountId, T::AccountId, BalanceOf<T>, Vec<u8>, bool, u64),
+
+		//InvoiceListEvent(Vec<Invoice<T::AccountId, T::AccountId, BalanceOf<T>>>),
 
 		/// Transfer
 		Transfer(T::AccountId, T::AccountId, BalanceOf<T>),
@@ -84,32 +94,85 @@ pub mod pallet {
 	#[pallet::call]
 	impl<T: Config> Pallet<T> {
 
-		/// Sign contract between two addresses
+		/// Create invoice between two addresses
 		#[pallet::weight(10_000)]
 		pub fn create_invoice(
 			origin: OriginFor<T>,
 			to: T::AccountId,
 			amount: BalanceOf<T>,
+			msg: Vec<u8>,
 		) -> DispatchResultWithPostInfo {
 			// Check if Tx is signed
 			let from = ensure_signed(origin)?;
 			// Check if the sender and receiver have not the same address
 			ensure!(from != to, Error::<T>::SameAddressError);
 
-
 			//Creating a Contract object
-			let contract = Contract {
+			let contract = Invoice {
 				origin: from.clone(),
 				to: to.clone(),
 				amount,
+				status: false,
+				id: 0,
+				msg: msg.clone(),
 			};
 
+			let mut invoice_vec: Vec<Invoice<T::AccountId, T::AccountId, BalanceOf<T>>> = Vec::new();
+			invoice_vec.push(contract);
+
+			let mut id:u64 = 0;
+			if <SimpleMap<T>>::contains_key(ID) {
+				let invoice_id = <SimpleMap<T>>::get(ID);
+				id = invoice_id + 1;
+			}
+
 			// Save in storage the sender and the contract
-			<ContractSender<T>>::insert(from.clone(), &contract);
+			<InvoiceSender<T>>::insert(from.clone(), &invoice_vec);
 			// Save in storage the reciever and the contract
-			<ContractReceiver<T>>::insert(to.clone(), contract);
+			<InvoiceReceiver<T>>::insert(to.clone(), &invoice_vec);
+			<SimpleMap<T>>::insert(ID, id);
 			//Throw Contract event
-			Self::deposit_event(Event::InvoiceEvent(from.clone(), to, amount));
+			Self::deposit_event(Event::InvoiceEvent(from.clone(), to, amount, msg, false, id));
+
+			Ok(().into())
+		}
+
+
+		/// Create invoice between two addresses
+		#[pallet::weight(10_000)]
+		pub fn show_all_invoices(
+			origin: OriginFor<T>,
+		) -> DispatchResultWithPostInfo {
+			// Check if Tx is signed
+			let from = ensure_signed(origin)?;
+			// Check if the sender and receiver have not the same address
+
+			if <InvoiceSender<T>>::contains_key(&from) {
+				let maybe_invoice_sender = <InvoiceSender<T>>::get(&from);
+				if let Some(invoice_sender) = maybe_invoice_sender {
+					//Self::deposit_event(Event::InvoiceListEvent(invoice_sender.get(index)));
+					//for i in invoice_sender {
+						//Self::deposit_event(Event::InvoiceListEvent(invoice_sender));
+						//Self::deposit_event(Event::InvoiceEvent(i.origin, i.to, i.amount, i.msg, i.status, i.id));
+					//}
+				}
+			}
+
+/*			if <InvoiceReceiver<T>>::contains_key(&from) {
+				let maybe_invoice_receiver = <InvoiceReceiver<T>>::get(&from);
+				if let Some(invoice_receiver) = maybe_invoice_receiver {
+					//Self::deposit_event(Event::InvoiceListEvent(invoice_receiver));
+				}
+			}*/
+
+
+			// Save in storage the sender and the contract
+		//	<InvoiceSender<T>>::get(from.clone());
+		//	<InvoiceReceiver<T>>::get(from.clone());
+			// Save in storage the reciever and the contract
+			//<ContractReceiver<T>>::insert(to.clone(), contract);
+			//Throw Contract event
+		//	Self::deposit_event(Event::InvoiceEvent(from.clone(), to, amount));
 
 			Ok(().into())
 		}

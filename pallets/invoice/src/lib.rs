@@ -1,19 +1,3 @@
-//! # Escrow Pallet
-//!
-//! We aim to build a Escrow pallet which will help communities to release funds easier to devs/teams.
-//! I would like to explain the purpose of the project with a real example.
-//! A developer wants to fix/develop a bug/feature. He requested some funds and his proposal got approved.
-//! Both of the parties (for ex: web3 community and contributor) sign an Escrow contract by defining the Web3 community address, the contributor address, the amount, the expiry date, and “take action days”.
-//! “Take action days” would be some supplement time after the contract has ended for the Web3 to test/check if the bug/feature has been delivered correctly.
-//! Once the contract is signed the Web3 funds will be locked into another address.
-//! During the take action days Web3 can decide to:
-//! 1-Send the funds manually to the contributor 2-Withdraw the funds because nothing was delivered 3-Do not take any action during the “take action days” and when these additive days are expired the contributor can withdraw the funds by himself.
-//! (This option would reduce the releasing fund steps by giving additional work to the contributor)
-//!
-//! ### Dispatchable Functions
-//! #### Role setting
-//!
-//! * `sign_contract` -It is used to sign an Escrow contract between two users.
 
 #![cfg_attr(not(feature = "std"), no_std)]
 #![allow(clippy::unused_unit)]
@@ -63,9 +47,6 @@ pub mod pallet {
 		pub origin: Origin,
 		pub to: AccountId,
 		pub amount: Amount,
-		pub current_block_number: u64,
-		pub work_days_in_block_number: u64,
-		pub take_action_days_in_block: u64,
 	}
 
 
@@ -83,13 +64,8 @@ pub mod pallet {
 	#[pallet::event]
 	#[pallet::generate_deposit(pub(super) fn deposit_event)]
 	pub enum Event<T: Config> {
-		/// Sign Contract
-		ContractEvent(T::AccountId, T::AccountId, BalanceOf<T>, u64, u64, u64),
-		/// Lock funds
-		Locked(T::AccountId, BalanceOf<T>),
-
-		/// Unlock funds
-		UnLock(T::AccountId, BalanceOf<T>),
+		/// Create invoice
+		InvoiceEvent(T::AccountId, T::AccountId, BalanceOf<T>),
 
 		/// Transfer
 		Transfer(T::AccountId, T::AccountId, BalanceOf<T>),
@@ -103,10 +79,6 @@ pub mod pallet {
 		WrongExpiringDate,
 		/// Contract is signed by the same addresses
 		SameAddressError,
-		/// Working days have not expired
-		WorkingDaysNotExpired,
-		/// Take action days not expired
-		TakeActionDaysNotExpired
 	}
 
 	#[pallet::call]
@@ -114,35 +86,22 @@ pub mod pallet {
 
 		/// Sign contract between two addresses
 		#[pallet::weight(10_000)]
-		pub fn sign_contract(
+		pub fn create_invoice(
 			origin: OriginFor<T>,
 			to: T::AccountId,
 			amount: BalanceOf<T>,
-			work_days: u64,
-			take_action_days: u64,
 		) -> DispatchResultWithPostInfo {
 			// Check if Tx is signed
 			let from = ensure_signed(origin)?;
 			// Check if the sender and receiver have not the same address
 			ensure!(from != to, Error::<T>::SameAddressError);
 
-			// calculate how many blocks per day gets generated
-			let prod_block_per_sec = 6;
-			let day_per_second = 86400;
-			let prod_block_per_day = day_per_second / prod_block_per_sec;
-
-			let current_block_number: u64 = frame_system::Pallet::<T>::block_number().try_into().unwrap_or(0);
-			let work_days_in_block_number = current_block_number + (work_days * prod_block_per_day);
-			let take_action_days_in_block = work_days_in_block_number + (take_action_days * prod_block_per_day);
 
 			//Creating a Contract object
 			let contract = Contract {
 				origin: from.clone(),
 				to: to.clone(),
 				amount,
-				current_block_number,
-				work_days_in_block_number,
-				take_action_days_in_block,
 			};
 
 			// Save in storage the sender and the contract
@@ -150,16 +109,9 @@ pub mod pallet {
 			// Save in storage the reciever and the contract
 			<ContractReceiver<T>>::insert(to.clone(), contract);
 			//Throw Contract event
-			Self::deposit_event(Event::ContractEvent(from.clone(), to, amount, current_block_number, work_days_in_block_number, take_action_days_in_block));
-
-			//Lock the funds
-			T::Currency::set_lock(EXAMPLE_ID, &from, amount, WithdrawReasons::all());
-
-			//Thrown Lock event
-			Self::deposit_event(Event::Locked(from, amount));
+			Self::deposit_event(Event::InvoiceEvent(from.clone(), to, amount));
 
 			Ok(().into())
 		}
-
 	}
 }

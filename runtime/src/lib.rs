@@ -46,6 +46,8 @@ pub use sp_runtime::{Perbill, Permill};
 
 pub use escrow;
 
+pub use invoice;
+
 /// An index to a block.
 pub type BlockNumber = u32;
 
@@ -271,6 +273,15 @@ impl escrow::Config for Runtime {
 	type WeightInfo = escrow::weights::SubstrateWeight<Runtime>;
 }
 
+impl invoice::Config for Runtime {
+	type Event = Event;
+	type Currency = Balances;
+}
+
+
+
+
+
 // Create the runtime by composing the FRAME pallets that were previously configured.
 construct_runtime!(
 	pub struct Runtime
@@ -289,6 +300,7 @@ construct_runtime!(
 		Sudo: pallet_sudo,
 		// Include the custom logic from the pallet-template in the runtime.
 		Escrow: escrow,
+		Invoice: invoice,
 	}
 );
 

@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="CMakePresetLoader"><![CDATA[{
+  "useNewFormat": true
+}]]></component>
   <component name="CMakeSettings">
     <configurations>
       <configuration PROFILE_NAME="Debug" ENABLED="true" CONFIG_NAME="Debug" />
@@ -7,16 +13,17 @@
   </component>
   <component name="CargoProjects">
     <cargoProject FILE="$PROJECT_DIR$/Cargo.toml" />
+    <cargoProject FILE="$PROJECT_DIR$/pallets/invoice/Cargo/Cargo.toml" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0f94cc98-2443-42bd-b46d-4130d0942d61" name="Changes" comment="&#10;- first commit">
+      <change afterPath="$PROJECT_DIR$/pallets/invoice/Cargo.toml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pallets/invoice/src/lib.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/substrate-node-template.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/substrate-node-template.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node/src/benchmarking.rs" beforeDir="false" afterPath="$PROJECT_DIR$/node/src/benchmarking.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node/src/rpc.rs" beforeDir="false" afterPath="$PROJECT_DIR$/node/src/rpc.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node/src/service.rs" beforeDir="false" afterPath="$PROJECT_DIR$/node/src/service.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pallets/escrow/src/lib.rs" beforeDir="false" afterPath="$PROJECT_DIR$/pallets/escrow/src/lib.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pallets/escrow/src/mock.rs" beforeDir="false" afterPath="$PROJECT_DIR$/pallets/escrow/src/mock.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pallets/escrow/src/tests.rs" beforeDir="false" afterPath="$PROJECT_DIR$/pallets/escrow/src/tests.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cargo.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/runtime/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/runtime/Cargo.toml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/runtime/src/lib.rs" beforeDir="false" afterPath="$PROJECT_DIR$/runtime/src/lib.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/scripts/docker_run.sh" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/docker_run.sh" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -35,43 +42,55 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="fix_escrow_build1" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RESET_MODE" value="HARD" />
   </component>
   <component name="MacroExpansionManager">
-    <option name="directoryName" value="q8r33kgk" />
+    <option name="directoryName" value="6vnqfkp0" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
   <component name="ProjectId" id="2EA3H2fM590UhErF8uIVcTT2Uia" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
-    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/elioprifti/escrow-node&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;org.rust.cargo.project.model.PROJECT_DISCOVERY&quot;: &quot;true&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;dynamic.analysis.tools.valgrind&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "cf.first.check.clang-format": "false",
+    "cidr.known.project.marker": "true",
+    "last_opened_file_path": "/Users/gertiprifti/CLionProjects/EscrowPallet2/pallets/invoice/src",
+    "nodejs_package_manager_path": "npm",
+    "org.rust.cargo.project.model.PROJECT_DISCOVERY": "true",
+    "org.rust.disableDetachedFileInspection/Users/gertiprifti/CLionProjects/EscrowPallet2/pallets/invoice/src/benchmarking.rs": "true",
+    "settings.editor.selected.configurable": "language.rust.cargo.check"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/pallets/invoice/src" />
+      <recent name="$PROJECT_DIR$/pallets/invoice" />
       <recent name="$PROJECT_DIR$/pallets" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/pallets/invoice" />
       <recent name="$PROJECT_DIR$/pallets/escrow/src" />
     </key>
   </component>
-  <component name="RunManager" selected="Cargo.Test tests::send_funds_test2">
+  <component name="RunManager" selected="Cargo.Run">
     <configuration name="Run" type="CargoCommandRunConfiguration" factoryName="Cargo Command" nameIsGenerated="true">
       <option name="command" value="run --release -- --dev --tmp" />
       <option name="workingDirectory" value="file://$PROJECT_DIR$" />
@@ -194,7 +213,7 @@
   </component>
   <component name="RustProjectSettings">
     <option name="runExternalLinterOnTheFly" value="true" />
-    <option name="toolchainHomeDirectory" value="$PROJECT_DIR$/../.cargo/bin" />
+    <option name="toolchainHomeDirectory" value="$USER_HOME$/.cargo/bin" />
     <option name="version" value="2" />
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
@@ -242,6 +261,11 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="- test" />
+    <MESSAGE value="- added withdraw_funds method&#10;- added send_funds method" />
+    <option name="LAST_COMMIT_MESSAGE" value="- added withdraw_funds method&#10;- added send_funds method" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

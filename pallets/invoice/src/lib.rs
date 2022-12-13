@@ -79,17 +79,19 @@ pub mod pallet {
 		//InvoiceListEvent(Vec<Invoice<T::AccountId, T::AccountId, BalanceOf<T>>>),
 
 		/// Transfer from sender to receiver
-		Transfer(T::AccountId, T::AccountId, BalanceOf<T>),
+		Transfer(T::AccountId, T::AccountId, BalanceOf<T>, bool),
 	}
 
 	#[pallet::error]
 	pub enum Error<T> {
 		/// Wrong address
 		WrongAddress,
-		/// Expiring Date was wrong/older than current date
-		WrongExpiringDate,
+
 		/// Contract is signed by the same addresses
 		SameAddressError,
+
+		/// No invoices found from sender acc or receiver acc
+		NoInvoicesFound
 	}
 
 	#[pallet::call]
@@ -138,7 +140,6 @@ pub mod pallet {
 			Ok(().into())
 		}
 
-
 		/// Create invoice between two addresses
 		#[pallet::weight(10_000)]
 		pub fn show_all_invoices(
@@ -169,21 +170,6 @@ pub mod pallet {
 			Ok(().into())
 		}
 
-		// pub fn  decrease_balance(
-		// 	id:T::FungibleTokenId,
-		// 	from: &T::AccountId,
-		// 	amount:Balance,
-		// )->DispatchResult{
-		// 	Balances::<T>::try_mutate(id,from, |balance| ->DispatchResult{
-		// 		*balance = balance.checked_sub(amount).ok_or(Error::<T>::NumOverflow)?;
-		// 		Ok(())
-		//
-		// 	})?;
-		//
-		// 	Ok(())
-		//
-		// }
-
 		/// Create invoice between two addresses
 		#[pallet::weight(10_000)]
 		pub fn pay_invoices(
@@ -197,6 +183,12 @@ pub mod pallet {
 			ensure!(from != to, Error::<T>::SameAddressError);
 			// Check if the sender and receiver have not the same address
 
+			// Check if the sender has invoice
+			ensure!(<InvoiceReceiver<T>>::contains_key(&from),Error::<T>::NoInvoicesFound);
+
+			// Check if the receiver has invoice
+			ensure!(<InvoiceSender<T>>::contains_key(&to),Error::<T>::NoInvoicesFound);
+
 			if <InvoiceReceiver<T>>::contains_key(&from) {
 				let maybe_invoice_recevier = <InvoiceReceiver<T>>::get(&from);
 				if let Some(mut invoices_recevier) = maybe_invoice_recevier {
@@ -205,15 +197,30 @@ pub mod pallet {
 								let maybe_invoice_sender = <InvoiceSender<T>>::get(&to);
 								if let Some(mut invoices_sender) = maybe_invoice_sender {
 
+									let mut emir = &invoices_recevier;
 
+									for sender in &invoices_sender {
+										let mut aa = sender.id;
+										let mut bb = sender.status;
+										let mut bb = sender.status;
+										let mut bb = sender.status;
+									}
 
-									let mut amount_copy: BalanceOf<T> =  0u64.saturated_into();
-									InvoiceReceiver::<T>::mutate(&from, |invoice_recevier| {
+									//Here i want to update the status to true so the second time for the same transaction the payment will be stopped because was made the first time
+									InvoiceReceiver::<T>::mutate(&from, |invoices| {
 										invoices_recevier.iter_mut().filter(|i| i.id == id && !i.status).for_each(|i| {
 											i.status = true;
-											amount_copy = i.amount
-										})
+										});
 									});
+
+
+									// let mut mut_iter = invoices_recevier.iter_mut().filter(|i| i.id == id && !i.status);
+									// if mut_iter.next() == None {
+									// 	ensure!(true,Error::<T>::NoInvoicesFound)
+									// }
+
+									let mut amount_copy: BalanceOf<T> =  0u64.saturated_into();
+									ensure!(<InvoiceSender<T>>::contains_key(&to),Error::<T>::NoInvoicesFound);
 
 									for z in invoices_recevier {
 										let mut aa = z.id;
@@ -222,11 +229,6 @@ pub mod pallet {
 										let mut bb = z.status;
 									}
 
-									InvoiceSender::<T>::mutate(&from, |invoice_sender| {
-										invoices_sender.iter_mut().filter(|i| i.id == id && !i.status).for_each(|i| {
-											i.status = true;
-										})
-									});
 
 									for z in invoices_sender {
 										let mut aa = z.id;
@@ -236,12 +238,11 @@ pub mod pallet {
 									}
 
 									T::Currency::transfer(&from, &to, amount_copy, AllowDeath)?;
-									Self::deposit_event(Event::Transfer(from, to, amount_copy));
+									Self::deposit_event(Event::Transfer(from, to, amount_copy,true));
 								}
 						}
 				}
 			}
-
 			Ok(().into())
 		}
 	}

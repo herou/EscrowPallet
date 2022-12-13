@@ -207,11 +207,23 @@ pub mod pallet {
 									}
 
 									//Here i want to update the status to true so the second time for the same transaction the payment will be stopped because was made the first time
-									InvoiceReceiver::<T>::mutate(&from, |invoices| {
-										invoices_recevier.iter_mut().filter(|i| i.id == id && !i.status).for_each(|i| {
-											i.status = true;
-										});
-									});
+									
+									// POSSIBLE SOLUTION
+									//InvoiceReceiver::<T>::mutate(&to, |invoices| { // Use to, not from
+									//	invoices.iter_mut().filter(|i| i.id == id && !i.status).for_each(|i| { // use invoices, not invoices_recevier
+									//		i.status = true;
+									//	});
+									//});
+									
+									// Simply iterate over your receiver invoices vector
+									for invoice in invoices_recevier {
+										if invoice.id == id { // if you find the invoice with the same id
+											invoice.status = true; // update its status
+											break; // exit loop
+										}
+									}
+
+									<InvoiceReceiver<T>>::insert(to.clone(), &invoices_recevier); // update the full storage
 
 
 									// let mut mut_iter = invoices_recevier.iter_mut().filter(|i| i.id == id && !i.status);

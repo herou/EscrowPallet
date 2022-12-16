@@ -1,4 +1,3 @@
-
 #![cfg_attr(not(feature = "std"), no_std)]
 #![allow(clippy::unused_unit)]
 
@@ -13,16 +12,15 @@ type BalanceOf<T> = <<T as Config>::Currency as Currency<AccountIdOf<T>>>::Balan
 
 #[frame_support::pallet]
 pub mod pallet {
-	use frame_support::{dispatch::DispatchResultWithPostInfo, pallet_prelude::*};
-	use frame_system::pallet_prelude::*;
 	use core::convert::TryInto;
+	use frame_support::{dispatch::*, pallet_prelude::*};
+	use frame_system::pallet_prelude::*;
 	use sp_std::vec::Vec;
 
-	use frame_support::{
-		traits::{Currency, ExistenceRequirement::AllowDeath},
-	};
-	use frame_support::traits::{LockableCurrency, WithdrawReasons};
 	use crate::{BalanceOf, EXAMPLE_ID, ID};
+	use frame_support::sp_runtime::SaturatedConversion;
+	use frame_support::traits::{Currency, ExistenceRequirement::AllowDeath};
+	use frame_support::traits::{LockableCurrency, WithdrawReasons};
 
 	/// Configure the pallet by specifying the parameters and types on which it depends.
 	#[pallet::config]
@@ -32,7 +30,6 @@ pub mod pallet {
 
 		/// The lockable currency type
 		type Currency: LockableCurrency<Self::AccountId, Moment = Self::BlockNumber>;
-
 	}
 
 	#[pallet::pallet]
@@ -43,7 +40,7 @@ pub mod pallet {
 	#[pallet::hooks]
 	impl<T: Config> Hooks<T::BlockNumber> for Pallet<T> {}
 
-	#[derive(Encode, Decode, RuntimeDebug, PartialEq, Eq, TypeInfo)]
+	#[derive(Encode, Decode, Clone, RuntimeDebug, PartialEq, Eq, TypeInfo)]
 	pub struct Invoice<Origin, AccountId, Amount> {
 		pub origin: Origin,
 		pub to: AccountId,
@@ -56,18 +53,27 @@ pub mod pallet {
 	#[pallet::storage]
 	#[pallet::getter(fn invoice_sender)]
 	#[pallet::unbounded]
-	pub(super) type InvoiceSender<T: Config> =
-	StorageMap<_, Blake2_128Concat, T::AccountId, Vec<Invoice<T::AccountId, T::AccountId, BalanceOf<T>>>, OptionQuery>;
+	pub(super) type InvoiceSender<T: Config> = StorageMap<
+		_,
+		Blake2_128Concat,
+		T::AccountId,
+		Vec<Invoice<T::AccountId, T::AccountId, BalanceOf<T>>>,
+		OptionQuery,
+	>;
 
 	#[pallet::storage]
 	#[pallet::getter(fn invoice_receiver)]
-	pub(super) type InvoiceReceiver<T: Config> =
-	StorageMap<_, Blake2_128Concat, T::AccountId, Vec<Invoice<T::AccountId, T::AccountId, BalanceOf<T>>>, OptionQuery>;
+	pub(super) type InvoiceReceiver<T: Config> = StorageMap<
+		_,
+		Blake2_128Concat,
+		T::AccountId,
+		Vec<Invoice<T::AccountId, T::AccountId, BalanceOf<T>>>,
+		OptionQuery,
+	>;
 
 	#[pallet::storage]
 	#[pallet::getter(fn simple_map)]
-	pub(super) type SimpleMap<T: Config> =
-	StorageMap<_, Blake2_128Concat, u8, u64, ValueQuery>;
+	pub(super) type SimpleMap<T: Config> = StorageMap<_, Blake2_128Concat, u8, u64, ValueQuery>;
 
 	#[pallet::event]
 	#[pallet::generate_deposit(pub(super) fn deposit_event)]
@@ -76,24 +82,25 @@ pub mod pallet {
 		InvoiceEvent(T::AccountId, T::AccountId, BalanceOf<T>, Vec<u8>, bool, u64),
 
 		//InvoiceListEvent(Vec<Invoice<T::AccountId, T::AccountId, BalanceOf<T>>>),
-
 		/// Transfer from sender to receiver
-		Transfer(T::AccountId, T::AccountId, BalanceOf<T>),
+		Transfer(T::AccountId, T::AccountId, BalanceOf<T>, bool),
 	}
 
 	#[pallet::error]
 	pub enum Error<T> {
 		/// Wrong address
 		WrongAddress,
-		/// Expiring Date was wrong/older than current date
-		WrongExpiringDate,
+
 		/// Contract is signed by the same addresses
 		SameAddressError,
+
+		/// No invoices found from sender acc or receiver acc
+		NoInvoicesFound,
+		AnyError,
 	}
 
 	#[pallet::call]
 	impl<T: Config> Pallet<T> {
-
 		/// Create invoice between two addresses
 		#[pallet::weight(10_000)]
 		pub fn create_invoice(
@@ -117,19 +124,20 @@ pub mod pallet {
 				msg: msg.clone(),
 			};
 
-			let mut invoice_vec: Vec<Invoice<T::AccountId, T::AccountId, BalanceOf<T>>> = Vec::new();
+			let mut invoice_vec: Vec<Invoice<T::AccountId, T::AccountId, BalanceOf<T>>> =
+				Vec::new();
 			invoice_vec.push(contract);
 
-			let mut id:u64 = 0;
+			let mut id: u64 = 0;
 			if <SimpleMap<T>>::contains_key(ID) {
 				let invoice_id = <SimpleMap<T>>::get(ID);
 				id = invoice_id + 1;
 			}
 
 			// Save in storage the sender and the invoices
-			<InvoiceSender<T>>::insert(from.clone(), &invoice_vec);
+			<InvoiceSender<T>>::insert(from.clone(), invoice_vec.clone());
 			// Save in storage the receiver and the invoices
-			<InvoiceReceiver<T>>::insert(to.clone(), &invoice_vec);
+			<InvoiceReceiver<T>>::insert(to.clone(), invoice_vec);
 			<SimpleMap<T>>::insert(ID, id);
 			//Throw Contract event
 			Self::deposit_event(Event::InvoiceEvent(from.clone(), to, amount, msg, false, id));
@@ -137,12 +145,9 @@ pub mod pallet {
 			Ok(().into())
 		}
 
-
 		/// Create invoice between two addresses
 		#[pallet::weight(10_000)]
-		pub fn show_all_invoices(
-			origin: OriginFor<T>,
-		) -> DispatchResultWithPostInfo {
+		pub fn show_all_invoices(origin: OriginFor<T>) -> DispatchResultWithPostInfo {
 			// Check if Tx is signed
 			let from = ensure_signed(origin)?;
 			// Check if the sender and receiver have not the same address
@@ -152,13 +157,13 @@ pub mod pallet {
 				if let Some(invoice_sender) = maybe_invoice_sender {
 					//Self::deposit_event(Event::InvoiceListEvent(invoice_sender.get(index)));
 					//for i in invoice_sender {
-						//Self::deposit_event(Event::InvoiceListEvent(invoice_sender));
-						//Self::deposit_event(Event::InvoiceEvent(i.origin, i.to, i.amount, i.msg, i.status, i.id));
+					//Self::deposit_event(Event::InvoiceListEvent(invoice_sender));
+					//Self::deposit_event(Event::InvoiceEvent(i.origin, i.to, i.amount, i.msg, i.status, i.id));
 					//}
 				}
 			}
 
-/*			if <InvoiceReceiver<T>>::contains_key(&from) {
+			/*			if <InvoiceReceiver<T>>::contains_key(&from) {
 				let maybe_invoice_receiver = <InvoiceReceiver<T>>::get(&from);
 				if let Some(invoice_receiver) = maybe_invoice_receiver {
 					//Self::deposit_event(Event::InvoiceListEvent(invoice_receiver));
@@ -168,74 +173,35 @@ pub mod pallet {
 			Ok(().into())
 		}
 
-		// pub fn  decrease_balance(
-		// 	id:T::FungibleTokenId,
-		// 	from: &T::AccountId,
-		// 	amount:Balance,
-		// )->DispatchResult{
-		// 	Balances::<T>::try_mutate(id,from, |balance| ->DispatchResult{
-		// 		*balance = balance.checked_sub(amount).ok_or(Error::<T>::NumOverflow)?;
-		// 		Ok(())
-		//
-		// 	})?;
-		//
-		// 	Ok(())
-		//
-		// }
-
 		/// Create invoice between two addresses
 		#[pallet::weight(10_000)]
-		pub fn pay_invoices(
-			origin: OriginFor<T>,
-			id: u64,
-		) -> DispatchResultWithPostInfo {
+		pub fn pay_invoices(origin: OriginFor<T>, to: T::AccountId, id: u64) -> DispatchResult {
 			// Check if Tx is signed
 			let from = ensure_signed(origin)?;
+
+			ensure!(from != to, Error::<T>::SameAddressError);
 			// Check if the sender and receiver have not the same address
 
-			if <InvoiceReceiver<T>>::contains_key(&from) {
-				let maybe_invoice_recevier = <InvoiceReceiver<T>>::get(&from);
-				if let Some(invoices_recevier) = maybe_invoice_recevier {
-					for invoice_recevier in invoices_recevier {
-						if invoice_recevier.id == id && !invoice_recevier.status {
-
-							if <InvoiceSender<T>>::contains_key(&invoice_recevier.origin) {
-								let maybe_invoice_sender = <InvoiceSender<T>>::get(&invoice_recevier.origin);
-								if let Some(invoices_sender) = maybe_invoice_sender {
-									for invoice_sender in invoices_sender {
-										if invoice_sender.id == id && !invoice_sender.status {
-
-
-											let contract = Invoice {
-												origin: from.clone(),
-												to: invoice_sender.to,
-												amount: invoice_sender.amount,
-												status: true,
-												id: 0,
-												msg: invoice_sender.msg,
-											};
-
-											let mut invoice_vec: Vec<Invoice<T::AccountId, T::AccountId, BalanceOf<T>>> = Vec::new();
-											invoice_vec.push(contract);
-
-
-
-
-										//	<InvoiceReceiver<T>>::insert(from.clone(), &invoice_vec);
-										//	<InvoiceReceiver<T>>::mutate(from.clone(), &invoice_vec);
-
-											T::Currency::transfer(&from, &invoice_recevier.origin, invoice_recevier.amount, AllowDeath)?;
-											Self::deposit_event(Event::Transfer(from.clone(), invoice_recevier.origin.clone(), invoice_recevier.amount.clone()));
-										}
-									}
-								}
-							}
-						}
+			let mut insert = false;
+			if let Some(mut invoices_recevier) = Self::invoice_receiver(&from) {
+				for invoice in &mut invoices_recevier {
+					if invoice.id == id  && invoice.status == false {
+						invoice.status = true;
+						insert = true
 					}
 				}
-			}
+				if insert {
+					InvoiceReceiver::<T>::insert(from.clone(), invoices_recevier);
 
-			Ok(().into())
+					let amount_copy: BalanceOf<T> = 0u64.saturated_into();
+
+					T::Currency::transfer(&to, &from, amount_copy, AllowDeath)?;
+					Self::deposit_event(Event::Transfer(to, from, amount_copy, true));
+
+					return Ok(());
+				}
+			}
+			Err(<Error<T>>::AnyError.into())
 		}
 	}
 }

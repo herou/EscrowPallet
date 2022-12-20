@@ -1,6 +1,6 @@
+use std::ptr::null;
 use crate::{mock::*, Error, Event, Invoice};
 use frame_support::{assert_noop, assert_ok};
-
 
 #[test]
 fn sign_contract_same_address_error() {
@@ -150,6 +150,10 @@ fn pay_invoices_error_any_2() {
 #[test]
 fn pay_invoices_success() {
     new_test_ext().execute_with(|| {
+        type AccountId = u64;
+        type BalanceOf = u64;
+      //  let mut invoice_vec: Vec<Invoice<T::AccountId, T::AccountId, BalanceOf<T>>> = Vec::new();
+
         const ALICE: u64 = 1;
         const BOB: u64 = 2;
 
@@ -171,6 +175,28 @@ fn pay_invoices_success() {
                 origin.clone(),
                  to,
             id));
+
+        let invoice = Invoice {
+            origin: BOB,
+            to: to.clone(),
+            amount,
+            status: false,
+            id: 0,
+            msg: msg.clone(),
+        };
+
+        let mut invoice_vec: Vec<Invoice<AccountId, AccountId, BalanceOf>> = Vec::new();
+        invoice_vec.push(invoice.clone());
+
+
+       let rripi =  Escrow::invoice_receiver(ALICE);
+
+        let rripi2 =  invoice_vec;
+
+
+       // assert_eq!(null(), Some(null()));
+        assert_eq!(Escrow::invoice_receiver(ALICE), Some(invoice_vec.clone()));
+
     })
 }
 

@@ -99,9 +99,9 @@ pub mod pallet {
 		AnyError,
 	}
 
+	/// Create invoice between two addresses
 	#[pallet::call]
 	impl<T: Config> Pallet<T> {
-		/// Create invoice between two addresses
 		#[pallet::weight(10_000)]
 		pub fn create_invoice(
 			origin: OriginFor<T>,
@@ -114,8 +114,8 @@ pub mod pallet {
 			// Check if the sender and receiver have not the same address
 			ensure!(from != to, Error::<T>::SameAddressError);
 
-			//Creating a Contract object
-			let contract = Invoice {
+			//Creating a Invoice object
+			let invoice = Invoice {
 				origin: from.clone(),
 				to: to.clone(),
 				amount,
@@ -125,7 +125,7 @@ pub mod pallet {
 			};
 
 			let mut invoice_vec: Vec<Invoice<T::AccountId, T::AccountId, BalanceOf<T>>> = Vec::new();
-			invoice_vec.push(contract);
+			invoice_vec.push(invoice);
 
 			let mut invoice_id: u64 = 0;
 			if <SimpleMap<T>>::contains_key(ID) {
@@ -145,7 +145,7 @@ pub mod pallet {
 			Ok(().into())
 		}
 
-		/// Create invoice between two addresses
+		/// Show all invoices
 		#[pallet::weight(10_000)]
 		pub fn show_all_invoices(origin: OriginFor<T>) -> DispatchResultWithPostInfo {
 			// Check if Tx is signed
@@ -181,6 +181,9 @@ pub mod pallet {
 
 			ensure!(from != receiver, Error::<T>::SameAddressError);
 			// Check if the sender and receiver have not the same address
+
+
+			let maybe_contract_sender = <InvoiceSender<T>>::get(&from);
 
 			let mut is_unpaid_invoice = false;
 			if let Some(mut invoices_recevier) = Self::invoice_receiver(&from) {

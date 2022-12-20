@@ -3,7 +3,7 @@ use crate::{mock::*, Error, Event, Invoice};
 use frame_support::{assert_noop, assert_ok};
 
 #[test]
-fn sign_contract_same_address_error() {
+fn create_invoice_same_address_error() {
     new_test_ext().execute_with(|| {
         const ALICE: u64 = 2;
         const BOB: u64 = 2;
@@ -24,7 +24,7 @@ fn sign_contract_same_address_error() {
 }
 
 #[test]
-fn sign_contract_ok() {
+fn create_invoice_ok() {
     new_test_ext().execute_with(|| {
         const ALICE: u64 = 1;
         const BOB: u64 = 2;
@@ -44,7 +44,7 @@ fn sign_contract_ok() {
 
 
 #[test]
-fn sign_contract_ok_2() {
+fn create_invoice_ok_2() {
     new_test_ext().execute_with(|| {
         const ALICE: u64 = 1;
         const BOB: u64 = 2;

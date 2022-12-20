@@ -10,6 +10,12 @@ const ID: u8 = 100;
 type AccountIdOf<T> = <T as frame_system::Config>::AccountId;
 type BalanceOf<T> = <<T as Config>::Currency as Currency<AccountIdOf<T>>>::Balance;
 
+
+#[cfg(test)]
+mod tests;
+#[cfg(test)]
+mod mock;
+
 #[frame_support::pallet]
 pub mod pallet {
 	use core::convert::TryInto;
@@ -53,23 +59,19 @@ pub mod pallet {
 	#[pallet::storage]
 	#[pallet::getter(fn invoice_sender)]
 	#[pallet::unbounded]
-	pub(super) type InvoiceSender<T: Config> = StorageMap<
-		_,
+	pub(super) type InvoiceSender<T: Config> = StorageMap<_,
 		Blake2_128Concat,
 		T::AccountId,
 		Vec<Invoice<T::AccountId, T::AccountId, BalanceOf<T>>>,
-		OptionQuery,
-	>;
+		OptionQuery, >;
 
 	#[pallet::storage]
 	#[pallet::getter(fn invoice_receiver)]
-	pub(super) type InvoiceReceiver<T: Config> = StorageMap<
-		_,
+	pub(super) type InvoiceReceiver<T: Config> = StorageMap<_,
 		Blake2_128Concat,
 		T::AccountId,
 		Vec<Invoice<T::AccountId, T::AccountId, BalanceOf<T>>>,
-		OptionQuery,
-	>;
+		OptionQuery, >;
 
 	#[pallet::storage]
 	#[pallet::getter(fn simple_map)]
@@ -81,7 +83,6 @@ pub mod pallet {
 		/// Create invoice
 		InvoiceEvent(T::AccountId, T::AccountId, BalanceOf<T>, Vec<u8>, bool, u64),
 
-		//InvoiceListEvent(Vec<Invoice<T::AccountId, T::AccountId, BalanceOf<T>>>),
 		/// Transfer from sender to receiver
 		Transfer(T::AccountId, T::AccountId, BalanceOf<T>, bool),
 	}
@@ -94,8 +95,7 @@ pub mod pallet {
 		/// Contract is signed by the same addresses
 		SameAddressError,
 
-		/// No invoices found from sender acc or receiver acc
-		NoInvoicesFound,
+		/// AnyError
 		AnyError,
 	}
 
@@ -124,23 +124,23 @@ pub mod pallet {
 				msg: msg.clone(),
 			};
 
-			let mut invoice_vec: Vec<Invoice<T::AccountId, T::AccountId, BalanceOf<T>>> =
-				Vec::new();
+			let mut invoice_vec: Vec<Invoice<T::AccountId, T::AccountId, BalanceOf<T>>> = Vec::new();
 			invoice_vec.push(contract);
 
-			let mut id: u64 = 0;
+			let mut invoice_id: u64 = 0;
 			if <SimpleMap<T>>::contains_key(ID) {
-				let invoice_id = <SimpleMap<T>>::get(ID);
-				id = invoice_id + 1;
+				let id = <SimpleMap<T>>::get(ID);
+				invoice_id = id + 1;
 			}
 
 			// Save in storage the sender and the invoices
 			<InvoiceSender<T>>::insert(from.clone(), invoice_vec.clone());
 			// Save in storage the receiver and the invoices
 			<InvoiceReceiver<T>>::insert(to.clone(), invoice_vec);
-			<SimpleMap<T>>::insert(ID, id);
+			// Save in storage the id of last invoice
+			<SimpleMap<T>>::insert(ID, invoice_id);
 			//Throw Contract event
-			Self::deposit_event(Event::InvoiceEvent(from.clone(), to, amount, msg, false, id));
+			Self::deposit_event(Event::InvoiceEvent(from.clone(), to, amount, msg, false, invoice_id));
 
 			Ok(().into())
 		}
@@ -175,28 +175,28 @@ pub mod pallet {
 
 		/// Create invoice between two addresses
 		#[pallet::weight(10_000)]
-		pub fn pay_invoices(origin: OriginFor<T>, to: T::AccountId, id: u64) -> DispatchResult {
+		pub fn pay_invoices(sender: OriginFor<T>, receiver: T::AccountId, id: u64) -> DispatchResult {
 			// Check if Tx is signed
-			let from = ensure_signed(origin)?;
+			let from = ensure_signed(sender)?;
 
-			ensure!(from != to, Error::<T>::SameAddressError);
+			ensure!(from != receiver, Error::<T>::SameAddressError);
 			// Check if the sender and receiver have not the same address
 
-			let mut insert = false;
+			let mut is_unpaid_invoice = false;
 			if let Some(mut invoices_recevier) = Self::invoice_receiver(&from) {
 				for invoice in &mut invoices_recevier {
 					if invoice.id == id  && invoice.status == false {
 						invoice.status = true;
-						insert = true
+						is_unpaid_invoice = true
 					}
 				}
-				if insert {
+				if is_unpaid_invoice {
 					InvoiceReceiver::<T>::insert(from.clone(), invoices_recevier);
 
 					let amount_copy: BalanceOf<T> = 0u64.saturated_into();
 
-					T::Currency::transfer(&to, &from, amount_copy, AllowDeath)?;
-					Self::deposit_event(Event::Transfer(to, from, amount_copy, true));
+					T::Currency::transfer(&receiver, &from, amount_copy, AllowDeath)?;
+					Self::deposit_event(Event::Transfer(receiver, from, amount_copy, true));
 
 					return Ok(());
 				}

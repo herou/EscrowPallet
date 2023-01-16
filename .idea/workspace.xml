@@ -68,7 +68,7 @@
       <recent name="$PROJECT_DIR$/pallets/escrow/src" />
     </key>
   </component>
-  <component name="RunManager" selected="Cargo.Test tests::send_funds_test2">
+  <component name="RunManager" selected="Cargo.Run">
     <configuration name="Run" type="CargoCommandRunConfiguration" factoryName="Cargo Command" nameIsGenerated="true">
       <option name="command" value="run --release -- --dev --tmp" />
       <option name="workingDirectory" value="file://$PROJECT_DIR$" />
